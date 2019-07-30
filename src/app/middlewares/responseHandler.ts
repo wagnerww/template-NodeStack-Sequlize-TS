@@ -1,5 +1,13 @@
-function responseHandler(ret, req, res, next) {
-  const msgResponse = {
+import { Request, Response, NextFunction } from "express";
+import { IResponseHandler } from "../interfaces/responseHandler";
+
+function responseHandler(
+  ret: IResponseHandler,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const msgResponse: IResponseHandler = {
     isSuccess: false,
     statusCode: ret.statusCode
   };

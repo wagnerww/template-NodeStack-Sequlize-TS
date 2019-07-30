@@ -1,17 +1,22 @@
-const usuariosModel = require("../models/usuarios");
+import db from "../models";
+import { Request, Response, NextFunction } from "express";
 const bcrypt = require("bcryptjs");
 
-const response = require("../../config/responsePattern");
+import response from "../../config/responsePattern";
 const urlApp = require("../Utils/baseurlApp");
 const {
   usuarioStore,
   recuperarSenha
 } = require("../validators/usuarioValidator");
 
+export interface RequestAuth extends Request {
+  id_usr?: Number;
+}
+
 class usuariosController {
-  async index(req, res, next) {
+  async index(req: RequestAuth, res: Response, next: NextFunction) {
     try {
-      const usuarios = await usuariosModel.query().select();
+      const usuarios = await db.Usuarios.findAll();
 
       await usuarios.map(async usuario => {
         usuario.avatar = await showAvatar(usuario.avatar);
@@ -29,7 +34,7 @@ class usuariosController {
     }
   }
 
-  async show(req, res, next) {
+  async show(req: Request, res: Response, next: NextFunction) {
     try {
       const { usr_id } = req;
       const id = usr_id;

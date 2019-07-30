@@ -1,5 +1,9 @@
-import { UsuariosModel } from "../models/usuarios";
+import * as Sequelize from "sequelize";
+
+import { UsuarioInstance, IUsuarios } from "../models/usuarios";
 
 export interface ModelsInterface {
-  Usuarios: UsuariosModel;
+  sequelize: Sequelize.Sequelize;
+  Sequelize: Sequelize.SequelizeStatic;
+  Usuarios: Sequelize.Model<UsuarioInstance, IUsuarios>;
 }

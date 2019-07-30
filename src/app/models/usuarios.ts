@@ -1,35 +1,26 @@
 import * as Sequelize from "sequelize";
-//import { genSaltSync, hashSync, compareSync } from "bcryptjs";
-
-import { BaseModelInterface } from "../interfaces/BaseModelInterface";
-import { ModelsInterface } from "../interfaces/ModelsInterface";
 
 export interface IUsuarios {
   id?: number;
-  name?: string;
+  nome?: string;
   email?: string;
-  password?: string;
-  photo?: string;
+  senha?: string;
+  avatar?: string;
+  telefone?: string;
+  perfil?: string;
   createdAt?: string;
   updatedAt?: string;
 }
 
-export interface UsuarioInstance
-  extends Sequelize.Instance<IUsuarios>,
-    IUsuarios {
-  //isPassword(encodedPassword: string, password: string): boolean;
-}
+export type UsuarioInstance = Sequelize.Instance<IUsuarios> & IUsuarios;
+type UsuarioModel = Sequelize.Model<UsuarioInstance, IUsuarios>;
 
-export interface UsuariosModel
-  extends BaseModelInterface,
-    Sequelize.Model<UsuarioInstance, IUsuarios> {}
-
-export default (
+export default function(
   sequelize: Sequelize.Sequelize,
   DataTypes: Sequelize.DataTypes
-): UsuariosModel => {
-  const User: UsuariosModel = sequelize.define(
-    "User",
+): UsuarioModel {
+  const Usuarios = sequelize.define<UsuarioInstance, IUsuarios>(
+    "usuarios",
     {
       id: {
         type: DataTypes.INTEGER,
@@ -37,7 +28,7 @@ export default (
         primaryKey: true,
         autoIncrement: true
       },
-      name: {
+      nome: {
         type: DataTypes.STRING(128),
         allowNull: false
       },
@@ -46,23 +37,31 @@ export default (
         allowNull: false,
         unique: true
       },
-      password: {
+      senha: {
         type: DataTypes.STRING(128),
         allowNull: false,
         validate: {
           notEmpty: true
         }
       },
-      photo: {
-        type: DataTypes.BLOB({
-          length: "long"
-        }),
+      avatar: {
+        type: DataTypes.STRING(2000),
+        allowNull: true,
+        defaultValue: null
+      },
+      telefone: {
+        type: DataTypes.STRING(30),
+        allowNull: true,
+        defaultValue: null
+      },
+      perfil: {
+        type: DataTypes.INTEGER(1),
         allowNull: true,
         defaultValue: null
       }
     },
     {
-      tableName: "users"
+      tableName: "usuarios"
       /* hooks: {
         beforeCreate: (
           user: UserInstance,
@@ -92,5 +91,5 @@ export default (
     return compareSync(password, encodedPassword);
   };*/
 
-  return User;
-};
+  return Usuarios;
+}
