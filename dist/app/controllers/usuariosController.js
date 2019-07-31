@@ -49,37 +49,29 @@ class usuariosController {
     }
     async store(req, res, next) {
         try {
-            console.log("chegou");
             const { body } = req;
             const { error } = usuarioValidator_1.usuarioStore.validate(body);
-            console.log("ate aqui o k");
             if (error) {
                 responsePattern_1.default.statusCode = 400;
                 responsePattern_1.default.message = error.message;
                 next(responsePattern_1.default);
                 return;
             }
-            console.log("ate aqui o k 2");
             const { email } = body;
             const isExiste = await models_1.default.Usuarios.find({ where: { email } });
-            console.log("ate aqui o k 3", isExiste);
             if (isExiste) {
                 responsePattern_1.default.statusCode = 400;
                 responsePattern_1.default.message = "Já existe um usuário com este e-mail!";
                 next(responsePattern_1.default);
                 return;
             }
-            console.log("ate aqui ok");
-            //body.senha = await bcrypt.hash(body.senha, 8);
             const usuario = await models_1.default.Usuarios.create(body);
             responsePattern_1.default.statusCode = 200;
             responsePattern_1.default.data = usuario;
-            console.log("chegou no fim");
             next(responsePattern_1.default);
             return;
         }
         catch (error) {
-            console.log("erro", error);
             responsePattern_1.default.statusCode = 500;
             responsePattern_1.default.message = error.message;
             next(responsePattern_1.default);
@@ -158,11 +150,13 @@ class usuariosController {
 }
 function showAvatar(avatar) {
     let url;
-    if (process.env.UPLOAD_METHOD === "S3") {
-        url = `${process.env.URL_CLOUD_STORAGE}/${encodeURIComponent(avatar)}`;
-    }
-    else {
-        url = `${baseurlApp_1.default}/files/${encodeURIComponent(avatar)}`;
+    if (avatar) {
+        if (process.env.UPLOAD_METHOD === "S3") {
+            url = `${process.env.URL_CLOUD_STORAGE}/${encodeURIComponent(avatar)}`;
+        }
+        else {
+            url = `${baseurlApp_1.default}/files/${encodeURIComponent(avatar)}`;
+        }
     }
     return url;
 }

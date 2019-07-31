@@ -61,40 +61,35 @@ class usuariosController {
 
   async store(req: HttpRequestUsuario, res: HttpResponse, next: Next) {
     try {
-      console.log("chegou");
       const { body } = req;
 
       const { error } = usuarioStore.validate(body);
-      console.log("ate aqui o k");
+
       if (error) {
         response.statusCode = 400;
         response.message = error.message;
         next(response);
         return;
       }
-      console.log("ate aqui o k 2");
+
       const { email } = body;
       const isExiste = await db.Usuarios.find({ where: { email } });
 
-      console.log("ate aqui o k 3", isExiste);
       if (isExiste) {
         response.statusCode = 400;
         response.message = "Já existe um usuário com este e-mail!";
         next(response);
         return;
       }
-      console.log("ate aqui ok");
-      //body.senha = await bcrypt.hash(body.senha, 8);
 
       const usuario = await db.Usuarios.create(body);
 
       response.statusCode = 200;
       response.data = usuario;
-      console.log("chegou no fim");
+
       next(response);
       return;
     } catch (error) {
-      console.log("erro", error);
       response.statusCode = 500;
       response.message = error.message;
       next(response);
@@ -183,10 +178,12 @@ class usuariosController {
 
 function showAvatar(avatar) {
   let url;
-  if (process.env.UPLOAD_METHOD === "S3") {
-    url = `${process.env.URL_CLOUD_STORAGE}/${encodeURIComponent(avatar)}`;
-  } else {
-    url = `${urlApp}/files/${encodeURIComponent(avatar)}`;
+  if (avatar) {
+    if (process.env.UPLOAD_METHOD === "S3") {
+      url = `${process.env.URL_CLOUD_STORAGE}/${encodeURIComponent(avatar)}`;
+    } else {
+      url = `${urlApp}/files/${encodeURIComponent(avatar)}`;
+    }
   }
   return url;
 }

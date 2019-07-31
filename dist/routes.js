@@ -21,7 +21,7 @@ routes.post("/usuarios", usuariosController.store);
 //routes.post("/usuario/trocarsenha/:hash", senhaUsuarioController.trocarSenha);
 //
 //routes.use(authMiddleware);
-//routes.get("/usuarios", usuariosController.index);
+routes.get("/usuarios", usuariosController.index);
 //
 //// Daqui para baixo, tudo é autenticado
 //
@@ -29,9 +29,9 @@ routes.post("/usuarios", usuariosController.store);
 //routes.post("/filas", agendamentoFilasController.store);
 //
 ///* ---- USUÁRIO ---- */
-//routes.put("/usuario", usuariosController.update);
+routes.put("/usuario", usuariosController.update);
 //routes.delete("/usuario", usuariosController.destroy);
-//routes.get("/usuario", usuariosController.show);
+////routes.get("/usuario", usuariosController.show);
 //routes.post(
 // "/usuario/avatar",
 // multer(multerConfig).single("file"),
