@@ -1,5 +1,13 @@
-import { Request } from "express";
+import { Request, Response, NextFunction } from "express";
 
-export interface Request extends Request {
-  id_usr?: Number;
+export interface HttpRequest extends Request {
+  usr_id?: number;
 }
+
+export interface HttpRequestUsuario extends HttpRequest {
+  id: number;
+}
+
+export interface HttpResponse extends Response {}
+
+export interface Next extends NextFunction {}

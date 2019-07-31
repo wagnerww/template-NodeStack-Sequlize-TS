@@ -1,11 +1,11 @@
-import { Request, Response, NextFunction } from "express";
 import { IResponseHandler } from "../interfaces/responseHandler";
+import { HttpRequest, HttpResponse, Next } from "../interfaces/HttpInterface";
 
 function responseHandler(
   ret: IResponseHandler,
-  req: Request,
-  res: Response,
-  next: NextFunction
+  req: HttpRequest,
+  res: HttpResponse,
+  next: Next
 ) {
   const msgResponse: IResponseHandler = {
     isSuccess: false,

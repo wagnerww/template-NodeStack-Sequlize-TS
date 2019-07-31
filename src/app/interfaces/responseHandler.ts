@@ -1,7 +1,7 @@
 export interface IResponseHandler {
-  statusCode?: Number;
+  statusCode?: number;
   data?: Object;
   details?: Object;
-  message: String;
+  message?: String;
   isSuccess?: Boolean;
 }

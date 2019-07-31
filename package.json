@@ -4,18 +4,27 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/express": "^4.17.0",
     "@types/node": "^12.6.8",
     "@types/sequelize": "4.27.2",
+    "types-joi": "^1.0.13",
     "typescript": "^3.5.3"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
     "express": "^4.17.1",
     "express-validation": "^1.0.2",
     "joi": "^14.3.1",
     "pg": "^7.12.0",
     "sequelize": "4.31.2",
     "youch": "^2.0.10"
+  },
+  "scripts": {
+    "dev": "NODE_ENV=development node ./dist/index.js",
+    "prod": "NODE_ENV=production node ./dist/index.js",
+    "emails": "node src/app/jobs/emails.js"
   }
 }

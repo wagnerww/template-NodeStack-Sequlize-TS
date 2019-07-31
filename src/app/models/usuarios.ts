@@ -20,7 +20,7 @@ export default function(
   DataTypes: Sequelize.DataTypes
 ): UsuarioModel {
   const Usuarios = sequelize.define<UsuarioInstance, IUsuarios>(
-    "usuarios",
+    "Usuarios",
     {
       id: {
         type: DataTypes.INTEGER,

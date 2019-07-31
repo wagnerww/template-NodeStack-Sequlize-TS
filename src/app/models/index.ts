@@ -1,3 +1,4 @@
+require("dotenv").config({});
 import * as fs from "fs";
 import * as path from "path";
 import * as Sequelize from "sequelize";
@@ -6,23 +7,26 @@ import { ModelsInterface } from "../interfaces/ModelsInterface";
 
 const basename: string = path.basename(module.filename);
 const env: string = process.env.NODE_ENV || "development";
-let config = require(path.resolve(`${__dirname}./../config/config.json`))[env];
+//let config = require(path.resolve(`${__dirname}./../config/config.json`))[env];
 let db = null;
 
 if (!db) {
   db = {};
 
-  const operatorsAliases = {
+  /*  const operatorsAliases = {
     $in: Sequelize.Op.in
   };
 
   config = Object.assign({ operatorsAliases }, config);
-
+*/
   const sequelize: Sequelize.Sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
-    config
+    process.env.DB_NAME,
+    process.env.DB_USER,
+    process.env.DB_PASS,
+    {
+      host: process.env.DB_HOST,
+      dialect: "postgres"
+    }
   );
 
   fs.readdirSync(__dirname)
