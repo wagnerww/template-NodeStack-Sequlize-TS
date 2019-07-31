@@ -6,16 +6,16 @@ const multerConfig = require("./config/multer");
 
 const authMiddleware = require("./app/middlewares/auth");*/
 
-const usuariosController = require("./app/controllers/usuariosController");
-/*const senhaUsuarioController = require("./app/controllers/senhaUsuarioController");
-const enderecosUsuarioController = require("./app/controllers/enderecosUsuarioController");
-const sessaoController = require("./app/controllers/sessaoController");
-const agendamentoFilasController = require("./app/controllers/agendamentoFilasController");*/
+import usuariosController from "./app/controllers/usuariosController";
+//const senhaUsuarioController = require("./app/controllers/senhaUsuarioController");
+//const enderecosUsuarioController = require("./app/controllers/enderecosUsuarioController");
+import sessaoController from "./app/controllers/sessaoController";
+//const agendamentoFilasController = require("./app/controllers/agendamentoFilasController");*/
 
 routes.get("/", (req, res) => res.send("API operando 🚀"));
 
 routes.post("/usuarios", usuariosController.store);
-//routes.post("/login", sessaoController.store);
+routes.post("/login", sessaoController.store);
 //
 ///* ---- RECUPERAÇÃO DE SENHA ---- */
 //routes.post("/usuario/recuperarsenha", senhaUsuarioController.recuperarSenha);
@@ -30,9 +30,9 @@ routes.get("/usuarios", usuariosController.index);
 //routes.post("/filas", agendamentoFilasController.store);
 //
 ///* ---- USUÁRIO ---- */
-routes.put("/usuario", usuariosController.update);
-//routes.delete("/usuario", usuariosController.destroy);
-////routes.get("/usuario", usuariosController.show);
+routes.put("/usuario/:id", usuariosController.update);
+routes.delete("/usuario/:id", usuariosController.destroy);
+routes.get("/usuario/:id", usuariosController.show);
 //routes.post(
 // "/usuario/avatar",
 // multer(multerConfig).single("file"),

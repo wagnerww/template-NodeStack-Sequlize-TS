@@ -1,11 +1,20 @@
 import { Request, Response, NextFunction } from "express";
+import { IUsuarios } from "../models/usuarios";
+import { IAuth } from "./AuthInterface";
 
 export interface HttpRequest extends Request {
   usr_id?: number;
 }
 
+export interface HttpRequestSession extends HttpRequest {
+  body: IAuth;
+}
+
 export interface HttpRequestUsuario extends HttpRequest {
-  id: number;
+  params: {
+    id: number;
+  };
+  body: IUsuarios;
 }
 
 export interface HttpResponse extends Response {}

@@ -1,13 +1,17 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const sessaoValidator = require("../validators/sessaoValidator");
-
-const response = require("../../config/responsePattern");
-const usuariosModel = require("../models/usuarios");
-const authConfig = require("../../config/auth");
+import {
+  HttpRequestSession,
+  HttpResponse,
+  Next
+} from "../interfaces/HttpInterface";
+import * as jwt from "jsonwebtoken";
+import * as bcrypt from "bcryptjs";
+import db from "../models";
+import { sessaoSchema as sessaoValidator } from "../validators/sessaoValidator";
+import response from "../../config/responsePattern";
+import authConfig from "../../config/auth";
 
 class SessionController {
-  async store(req, res, next) {
+  async store(req: HttpRequestSession, res: HttpResponse, next: Next) {
     const { body } = req;
     //Valida schema de dados
     const { error } = sessaoValidator.validate(body);
@@ -21,10 +25,7 @@ class SessionController {
 
     const { email, senha } = body;
 
-    const usuario = await usuariosModel
-      .query()
-      .where({ email })
-      .first();
+    const usuario = await db.Usuarios.findOne({ where: { email } });
 
     if (!usuario) {
       response.statusCode = 400;
@@ -55,4 +56,4 @@ class SessionController {
   }
 }
 
-module.exports = new SessionController();
+export default new SessionController();

@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = require("../models");
-const bcrypt = require("bcryptjs");
 const responsePattern_1 = require("../../config/responsePattern");
 const baseurlApp_1 = require("../Utils/baseurlApp");
 const usuarioValidator_1 = require("../validators/usuarioValidator");
@@ -26,7 +25,7 @@ class usuariosController {
     }
     async show(req, res, next) {
         try {
-            const { id } = req;
+            const { id } = req.params;
             if (!id) {
                 responsePattern_1.default.statusCode = 400;
                 responsePattern_1.default.message = "É necessário informar o id";
@@ -80,17 +79,17 @@ class usuariosController {
     }
     async update(req, res, next) {
         try {
-            const { body, params, usr_id, id } = req;
+            const { body, params, usr_id } = req;
+            const { id } = params;
             if (!id) {
                 responsePattern_1.default.statusCode = 400;
                 responsePattern_1.default.message = "É necessário informar o id!";
                 next(responsePattern_1.default);
                 return;
             }
-            if (body.senha) {
-                body.senha = await bcrypt.hash(body.senha, 8);
-            }
-            const usuario = await models_1.default.Usuarios.update(body, { where: { id } });
+            const usuarioUpdate = await models_1.default.Usuarios.findById(id);
+            await usuarioUpdate.update(body);
+            const usuario = await usuarioUpdate;
             responsePattern_1.default.statusCode = 200;
             responsePattern_1.default.data = usuario;
             next(responsePattern_1.default);
@@ -105,7 +104,8 @@ class usuariosController {
     }
     async destroy(req, res, next) {
         try {
-            const { body, usr_id, id } = req;
+            const { body, usr_id, params } = req;
+            const { id } = params;
             if (!id) {
                 responsePattern_1.default.statusCode = 400;
                 responsePattern_1.default.message = "É necessário informar o id!";
@@ -160,4 +160,4 @@ function showAvatar(avatar) {
     }
     return url;
 }
-module.exports = new usuariosController();
+exports.default = new usuariosController();

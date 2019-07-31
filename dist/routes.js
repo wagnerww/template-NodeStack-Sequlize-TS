@@ -7,21 +7,21 @@ const multerConfig = require("./config/multer");
 
 
 const authMiddleware = require("./app/middlewares/auth");*/
-const usuariosController = require("./app/controllers/usuariosController");
-/*const senhaUsuarioController = require("./app/controllers/senhaUsuarioController");
-const enderecosUsuarioController = require("./app/controllers/enderecosUsuarioController");
-const sessaoController = require("./app/controllers/sessaoController");
-const agendamentoFilasController = require("./app/controllers/agendamentoFilasController");*/
+const usuariosController_1 = require("./app/controllers/usuariosController");
+//const senhaUsuarioController = require("./app/controllers/senhaUsuarioController");
+//const enderecosUsuarioController = require("./app/controllers/enderecosUsuarioController");
+const sessaoController_1 = require("./app/controllers/sessaoController");
+//const agendamentoFilasController = require("./app/controllers/agendamentoFilasController");*/
 routes.get("/", (req, res) => res.send("API operando 🚀"));
-routes.post("/usuarios", usuariosController.store);
-//routes.post("/login", sessaoController.store);
+routes.post("/usuarios", usuariosController_1.default.store);
+routes.post("/login", sessaoController_1.default.store);
 //
 ///* ---- RECUPERAÇÃO DE SENHA ---- */
 //routes.post("/usuario/recuperarsenha", senhaUsuarioController.recuperarSenha);
 //routes.post("/usuario/trocarsenha/:hash", senhaUsuarioController.trocarSenha);
 //
 //routes.use(authMiddleware);
-routes.get("/usuarios", usuariosController.index);
+routes.get("/usuarios", usuariosController_1.default.index);
 //
 //// Daqui para baixo, tudo é autenticado
 //
@@ -29,9 +29,9 @@ routes.get("/usuarios", usuariosController.index);
 //routes.post("/filas", agendamentoFilasController.store);
 //
 ///* ---- USUÁRIO ---- */
-routes.put("/usuario", usuariosController.update);
-//routes.delete("/usuario", usuariosController.destroy);
-////routes.get("/usuario", usuariosController.show);
+routes.put("/usuario/:id", usuariosController_1.default.update);
+routes.delete("/usuario/:id", usuariosController_1.default.destroy);
+routes.get("/usuario/:id", usuariosController_1.default.show);
 //routes.post(
 // "/usuario/avatar",
 // multer(multerConfig).single("file"),

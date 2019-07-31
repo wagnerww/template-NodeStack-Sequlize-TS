@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const bcrypt = require("bcryptjs");
 function default_1(sequelize, DataTypes) {
     const Usuarios = sequelize.define("Usuarios", {
         id: {
@@ -40,7 +41,18 @@ function default_1(sequelize, DataTypes) {
             defaultValue: null
         }
     }, {
-        tableName: "usuarios"
+        tableName: "usuarios",
+        hooks: {
+            beforeCreate: async (usuairo, options) => {
+                usuairo.senha = await bcrypt.hash(usuairo.senha, 8);
+            },
+            beforeUpdate: async (usuairo, options) => {
+                if (usuairo.changed("senha")) {
+                    console.log("update");
+                    usuairo.senha = await bcrypt.hash(usuairo.senha, 8);
+                }
+            }
+        }
         /* hooks: {
           beforeCreate: (
             user: UserInstance,

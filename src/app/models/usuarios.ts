@@ -1,4 +1,5 @@
 import * as Sequelize from "sequelize";
+import * as bcrypt from "bcryptjs";
 
 export interface IUsuarios {
   id?: number;
@@ -61,7 +62,25 @@ export default function(
       }
     },
     {
-      tableName: "usuarios"
+      tableName: "usuarios",
+      hooks: {
+        beforeCreate: async (
+          usuairo: UsuarioInstance,
+          options: Sequelize.CreateOptions
+        ) => {
+          usuairo.senha = await bcrypt.hash(usuairo.senha, 8);
+        },
+        beforeUpdate: async (
+          usuairo: UsuarioInstance,
+          options: Sequelize.CreateOptions
+        ) => {
+          if (usuairo.changed("senha")) {
+            console.log("update");
+            usuairo.senha = await bcrypt.hash(usuairo.senha, 8);
+          }
+        }
+      }
+
       /* hooks: {
         beforeCreate: (
           user: UserInstance,

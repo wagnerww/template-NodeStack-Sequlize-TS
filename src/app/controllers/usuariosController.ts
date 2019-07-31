@@ -34,7 +34,7 @@ class usuariosController {
 
   async show(req: HttpRequestUsuario, res: HttpResponse, next: Next) {
     try {
-      const { id } = req;
+      const { id } = req.params;
 
       if (!id) {
         response.statusCode = 400;
@@ -99,7 +99,8 @@ class usuariosController {
 
   async update(req: HttpRequestUsuario, res: HttpResponse, next: Next) {
     try {
-      const { body, params, usr_id, id } = req;
+      const { body, params, usr_id } = req;
+      const { id } = params;
 
       if (!id) {
         response.statusCode = 400;
@@ -108,11 +109,10 @@ class usuariosController {
         return;
       }
 
-      if (body.senha) {
-        body.senha = await bcrypt.hash(body.senha, 8);
-      }
+      const usuarioUpdate = await db.Usuarios.findById(id);
+      await usuarioUpdate.update(body);
 
-      const usuario = await db.Usuarios.update(body, { where: { id } });
+      const usuario = await usuarioUpdate;
 
       response.statusCode = 200;
       response.data = usuario;
@@ -128,7 +128,8 @@ class usuariosController {
 
   async destroy(req: HttpRequestUsuario, res: HttpResponse, next: Next) {
     try {
-      const { body, usr_id, id } = req;
+      const { body, usr_id, params } = req;
+      const { id } = params;
 
       if (!id) {
         response.statusCode = 400;
@@ -188,4 +189,4 @@ function showAvatar(avatar) {
   return url;
 }
 
-module.exports = new usuariosController();
+export default new usuariosController();
