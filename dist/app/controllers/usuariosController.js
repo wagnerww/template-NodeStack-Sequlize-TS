@@ -61,8 +61,7 @@ class usuariosController {
             }
             console.log("ate aqui o k 2");
             const { email } = body;
-            //const isExiste = await db.Usuarios.find({ where: { email } });
-            const isExiste = await models_1.default.Usuarios.findAll();
+            const isExiste = await models_1.default.Usuarios.find({ where: { email } });
             console.log("ate aqui o k 3", isExiste);
             if (isExiste) {
                 responsePattern_1.default.statusCode = 400;
@@ -75,6 +74,7 @@ class usuariosController {
             const usuario = await models_1.default.Usuarios.create(body);
             responsePattern_1.default.statusCode = 200;
             responsePattern_1.default.data = usuario;
+            console.log("chegou no fim");
             next(responsePattern_1.default);
             return;
         }

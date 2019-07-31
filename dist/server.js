@@ -8,7 +8,7 @@ const Youch = require("youch");
 //const sentryConfig = require("./config/sentry");
 const path = require("path");
 const cors = require("cors");
-//const responseHandler = require("./app/Middlewares/responseHandler");
+const responseHandler = require("./app/Middlewares/responseHandler");
 class App {
     constructor() {
         this.express = express();
@@ -27,7 +27,7 @@ class App {
     }
     routes() {
         this.express.use(require("./routes"));
-        // this.express.use(responseHandler);
+        this.express.use(responseHandler);
     }
     exception() {
         if (process.env.NODE_ENV === "production") {

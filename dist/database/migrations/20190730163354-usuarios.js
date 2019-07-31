@@ -15,13 +15,34 @@ module.exports = {
                 allowNull: false
             },
             email: {
-                type: Sequelize.STRING(200)
+                type: Sequelize.STRING(200),
+                allowNull: false
             },
             senha: {
-                type: Sequelize.STRING(150)
+                type: Sequelize.STRING(150),
+                allowNull: false
+            },
+            perfil: {
+                type: Sequelize.INTEGER,
+                allowNull: false
+            },
+            telefone: {
+                type: Sequelize.STRING(35),
+                allowNull: true
             },
             avatar: {
-                type: Sequelize.STRING(2000)
+                type: Sequelize.STRING(2000),
+                allowNull: true
+            },
+            createdAt: {
+                allowNull: false,
+                type: Sequelize.DATE,
+                defaultValue: new Date()
+            },
+            updatedAt: {
+                allowNull: false,
+                type: Sequelize.DATE,
+                defaultValue: new Date()
             }
         });
     },

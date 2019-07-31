@@ -7,7 +7,7 @@ import * as Youch from "youch";
 import * as path from "path";
 import * as cors from "cors";
 
-//const responseHandler = require("./app/Middlewares/responseHandler");
+const responseHandler = require("./app/Middlewares/responseHandler");
 
 class App {
   public express: express.Application;
@@ -35,7 +35,7 @@ class App {
 
   routes() {
     this.express.use(require("./routes"));
-    // this.express.use(responseHandler);
+    this.express.use(responseHandler);
   }
 
   exception() {

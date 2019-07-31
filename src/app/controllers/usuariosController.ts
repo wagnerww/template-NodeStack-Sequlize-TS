@@ -74,8 +74,8 @@ class usuariosController {
       }
       console.log("ate aqui o k 2");
       const { email } = body;
-      //const isExiste = await db.Usuarios.find({ where: { email } });
-      const isExiste = await db.Usuarios.findAll();
+      const isExiste = await db.Usuarios.find({ where: { email } });
+
       console.log("ate aqui o k 3", isExiste);
       if (isExiste) {
         response.statusCode = 400;
@@ -90,6 +90,7 @@ class usuariosController {
 
       response.statusCode = 200;
       response.data = usuario;
+      console.log("chegou no fim");
       next(response);
       return;
     } catch (error) {
