@@ -1,8 +1,13 @@
-const enderecosModel = require("../models/enderecosUsuario");
-const response = require("../../config/responsePattern");
+import db from "../models";
+import {
+  HttpRequestUsuarioEnderecos,
+  HttpResponse,
+  Next
+} from "../interfaces/HttpInterface";
+import response from "../../config/responsePattern";
 
 class enderecosUsuarioController {
-  async index(req, res, next) {
+  async index(req: HttpRequestUsuarioEnderecos, res: HttpResponse, next: Next) {
     try {
       const { usr_id } = req.params;
 
@@ -13,7 +18,9 @@ class enderecosUsuarioController {
         return;
       }
 
-      const enderecos = await enderecosModel.query().where({ usr_id });
+      const enderecos = await db.UsuarioEnderecos.findAll({
+        where: { usr_id }
+      });
 
       response.statusCode = 200;
       response.data = enderecos;
@@ -27,10 +34,9 @@ class enderecosUsuarioController {
     }
   }
 
-  async show(req, res, next) {
+  async show(req: HttpRequestUsuarioEnderecos, res: HttpResponse, next: Next) {
     try {
-      const { params } = req;
-      const { id, usr_id } = params;
+      const { id, usr_id } = req.params;
 
       if (!id || !usr_id) {
         response.statusCode = 400;
@@ -39,10 +45,9 @@ class enderecosUsuarioController {
         return;
       }
 
-      const endereco = await enderecosModel
-        .query()
-        .where({ id, usr_id })
-        .first();
+      const endereco = await db.UsuarioEnderecos.findOne({
+        where: { id, usr_id }
+      });
 
       response.statusCode = 200;
       response.data = endereco;
@@ -56,7 +61,7 @@ class enderecosUsuarioController {
     }
   }
 
-  async store(req, res, next) {
+  async store(req: HttpRequestUsuarioEnderecos, res: HttpResponse, next: Next) {
     try {
       const { body, params } = req;
       const { usr_id } = params;
@@ -78,7 +83,7 @@ class enderecosUsuarioController {
         return;
       }*/
 
-      const endereco = await enderecosModel.query().insert(body);
+      const endereco = await db.UsuarioEnderecos.create(body);
 
       response.statusCode = 200;
       response.data = endereco;
@@ -92,7 +97,11 @@ class enderecosUsuarioController {
     }
   }
 
-  async update(req, res, next) {
+  async update(
+    req: HttpRequestUsuarioEnderecos,
+    res: HttpResponse,
+    next: Next
+  ) {
     try {
       const { body, params } = req;
       const { id, usr_id } = params;
@@ -104,11 +113,11 @@ class enderecosUsuarioController {
         return;
       }
 
-      const enderecoSelect = await enderecosModel
-        .query()
-        .findOne({ id, usr_id });
+      const endereco = await db.UsuarioEnderecos.update(body, {
+        where: { id, usr_id }
+      });
 
-      const endereco = await enderecoSelect.$query().updateAndFetch(body);
+      //const endereco = await enderecoSelect.$query().updateAndFetch(body);
 
       response.statusCode = 200;
       response.data = endereco;
@@ -122,7 +131,11 @@ class enderecosUsuarioController {
     }
   }
 
-  async destroy(req, res, next) {
+  async destroy(
+    req: HttpRequestUsuarioEnderecos,
+    res: HttpResponse,
+    next: Next
+  ) {
     try {
       const { params } = req;
       const { id, usr_id } = params;
@@ -134,10 +147,9 @@ class enderecosUsuarioController {
         return;
       }
 
-      const endereco = await enderecosModel
-        .query()
-        .delete()
-        .where({ id, usr_id });
+      const endereco = await db.UsuarioEnderecos.destroy({
+        where: { id, usr_id }
+      });
 
       response.statusCode = 200;
       response.data = endereco;
@@ -152,4 +164,4 @@ class enderecosUsuarioController {
   }
 }
 
-module.exports = new enderecosUsuarioController();
+export default new enderecosUsuarioController();

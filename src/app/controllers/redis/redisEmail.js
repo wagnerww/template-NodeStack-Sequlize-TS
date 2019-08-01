@@ -1,7 +1,7 @@
 const redis = require("../../../config/redis");
 
 class redisEmailController {
-  async index(req, res, next) {
+  /* async index(req, res, next) {
     try {
       const filas = await filasModel.query().select();
 
@@ -15,7 +15,7 @@ class redisEmailController {
       next(response);
       return;
     }
-  }
+  }*/
 
   async store(conteudo) {
     const value = JSON.stringify(conteudo);
@@ -35,7 +35,7 @@ class redisEmailController {
     return redisError;
   }
 
-  async destroy(req, res, next) {
+  /* async destroy(req, res, next) {
     try {
       const { params } = req;
       const { id } = params;
@@ -62,7 +62,7 @@ class redisEmailController {
       next(response);
       return;
     }
-  }
+  }*/
 }
 
 module.exports = new redisEmailController();

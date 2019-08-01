@@ -1,14 +1,19 @@
-const filasModel = require("../models/filas");
-const redisEmail = require("./redis/redisEmail");
-const response = require("../../config/responsePattern");
+import db from "../models";
+import {
+  HttpRequestFilas,
+  HttpResponse,
+  Next
+} from "../interfaces/HttpInterface";
+import response from "../../config/responsePattern";
+//const redisEmail = require("./redis/redisEmail");
 
-const filasValidator = require("../validators/filasValidator");
-const emailValidator = require("../validators/emailValidator");
+import { filas } from "../validators/filasValidator";
+import { emailValidator } from "../validators/emailValidator";
 
 class enderecosUsuarioController {
-  async index(req, res, next) {
+  async index(req: HttpRequestFilas, res: HttpResponse, next: Next) {
     try {
-      const filas = await filasModel.query().select();
+      const filas = await db.Filas.findAll();
 
       response.statusCode = 200;
       response.data = filas;
@@ -22,7 +27,7 @@ class enderecosUsuarioController {
     }
   }
 
-  async show(req, res, next) {
+  async show(req: HttpRequestFilas, res: HttpResponse, next: Next) {
     try {
       const { id } = req.params;
 
@@ -33,7 +38,7 @@ class enderecosUsuarioController {
         return;
       }
 
-      const fila = await filasModel.query().findById(id);
+      const fila = await db.Filas.findById(id);
 
       response.statusCode = 200;
       response.data = fila;
@@ -47,11 +52,12 @@ class enderecosUsuarioController {
     }
   }
 
-  async store(req, res, next) {
+  async store(req: HttpRequestFilas, res: HttpResponse, next: Next) {
     try {
       const { body } = req;
       let fila = {};
-      const { error } = filasValidator.validate(body);
+
+      const { error } = filas.validate(body);
 
       if (error) {
         response.statusCode = 400;
@@ -70,10 +76,12 @@ class enderecosUsuarioController {
             next(response);
             return;
           }
-          const isOk = await redisEmail.store(body.conteudoJson);
+          const isOk = false;
+          //const isOk = await redisEmail.store(body.conteudoJson);
           if (!isOk) {
             body.status = 1;
-            fila = await filasModel.query().insert(body);
+            body.conteudoJson = JSON.stringify(body.conteudoJson);
+            fila = await db.Filas.create(body);
           }
           break;
 
@@ -93,7 +101,7 @@ class enderecosUsuarioController {
     }
   }
 
-  async update(req, res, next) {
+  async update(req: HttpRequestFilas, res: HttpResponse, next: Next) {
     try {
       const { body, params } = req;
       const { id } = params;
@@ -105,7 +113,7 @@ class enderecosUsuarioController {
         return;
       }
 
-      const fila = await filasModel.query().updateAndFetchById(id);
+      const fila = await db.Filas.update(body, { where: { id } });
 
       response.statusCode = 200;
       response.data = fila;
@@ -119,10 +127,9 @@ class enderecosUsuarioController {
     }
   }
 
-  async destroy(req, res, next) {
+  async destroy(req: HttpRequestFilas, res: HttpResponse, next: Next) {
     try {
-      const { params } = req;
-      const { id } = params;
+      const { id } = req.params;
 
       if (!id) {
         response.statusCode = 400;
@@ -131,10 +138,7 @@ class enderecosUsuarioController {
         return;
       }
 
-      const fila = await filasModel
-        .query()
-        .delete()
-        .where({ id });
+      const fila = await db.Filas.destroy({ where: { id } });
 
       response.statusCode = 200;
       response.data = fila;
@@ -149,4 +153,4 @@ class enderecosUsuarioController {
   }
 }
 
-module.exports = new enderecosUsuarioController();
+export default new enderecosUsuarioController();

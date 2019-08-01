@@ -24,7 +24,7 @@ module.exports = {
       },
       qtdExecucao: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
       },
       observacao: {
         type: Sequelize.STRING(1000),

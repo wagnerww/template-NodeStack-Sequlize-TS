@@ -9,9 +9,9 @@ const multerConfig = require("./config/multer");
 const authMiddleware = require("./app/middlewares/auth");*/
 const usuariosController_1 = require("./app/controllers/usuariosController");
 //const senhaUsuarioController = require("./app/controllers/senhaUsuarioController");
-//const enderecosUsuarioController = require("./app/controllers/enderecosUsuarioController");
+const enderecosUsuarioController_1 = require("./app/controllers/enderecosUsuarioController");
 const sessaoController_1 = require("./app/controllers/sessaoController");
-//const agendamentoFilasController = require("./app/controllers/agendamentoFilasController");*/
+const agendamentoFilasController_1 = require("./app/controllers/agendamentoFilasController");
 routes.get("/", (req, res) => res.send("API operando 🚀"));
 routes.post("/usuarios", usuariosController_1.default.store);
 routes.post("/login", sessaoController_1.default.store);
@@ -24,10 +24,9 @@ routes.post("/login", sessaoController_1.default.store);
 routes.get("/usuarios", usuariosController_1.default.index);
 //
 //// Daqui para baixo, tudo é autenticado
-//
 ///* ---- FILAS ---- */
-//routes.post("/filas", agendamentoFilasController.store);
-//
+routes.post("/filas", agendamentoFilasController_1.default.store);
+routes.get("/filas", agendamentoFilasController_1.default.index);
 ///* ---- USUÁRIO ---- */
 routes.put("/usuario/:id", usuariosController_1.default.update);
 routes.delete("/usuario/:id", usuariosController_1.default.destroy);
@@ -39,13 +38,10 @@ routes.get("/usuario/:id", usuariosController_1.default.show);
 );*/
 /* ---- USUÁRIO ENDEREÇOS ---- */
 // -- CRUD Endereço do usuário
-/*routes.post("/usuario/:usr_id/endereco", enderecosUsuarioController.store);
-routes.put("/usuario/:usr_id/endereco/:id", enderecosUsuarioController.update);
-routes.delete(
-  "/usuario/:usr_id/endereco/:id",
-  enderecosUsuarioController.destroy
-);
+routes.post("/usuario/:usr_id/endereco", enderecosUsuarioController_1.default.store);
+routes.put("/usuario/:usr_id/endereco/:id", enderecosUsuarioController_1.default.update);
+routes.delete("/usuario/:usr_id/endereco/:id", enderecosUsuarioController_1.default.destroy);
 // -- Todos os endereços de um usuário
-routes.get("/usuario/:usr_id/enderecos", enderecosUsuarioController.index);
-routes.get("/usuario/:usr_id/enderecos/:id", enderecosUsuarioController.show);*/
+routes.get("/usuario/:usr_id/enderecos", enderecosUsuarioController_1.default.index);
+routes.get("/usuario/:usr_id/endereco/:id", enderecosUsuarioController_1.default.show);
 module.exports = routes;

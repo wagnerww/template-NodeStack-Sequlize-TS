@@ -8,9 +8,9 @@ const authMiddleware = require("./app/middlewares/auth");*/
 
 import usuariosController from "./app/controllers/usuariosController";
 //const senhaUsuarioController = require("./app/controllers/senhaUsuarioController");
-//const enderecosUsuarioController = require("./app/controllers/enderecosUsuarioController");
+import enderecosUsuarioController from "./app/controllers/enderecosUsuarioController";
 import sessaoController from "./app/controllers/sessaoController";
-//const agendamentoFilasController = require("./app/controllers/agendamentoFilasController");*/
+import agendamentoFilasController from "./app/controllers/agendamentoFilasController";
 
 routes.get("/", (req, res) => res.send("API operando 🚀"));
 
@@ -25,10 +25,11 @@ routes.post("/login", sessaoController.store);
 routes.get("/usuarios", usuariosController.index);
 //
 //// Daqui para baixo, tudo é autenticado
-//
+
 ///* ---- FILAS ---- */
-//routes.post("/filas", agendamentoFilasController.store);
-//
+routes.post("/filas", agendamentoFilasController.store);
+routes.get("/filas", agendamentoFilasController.index);
+
 ///* ---- USUÁRIO ---- */
 routes.put("/usuario/:id", usuariosController.update);
 routes.delete("/usuario/:id", usuariosController.destroy);
@@ -41,7 +42,7 @@ routes.get("/usuario/:id", usuariosController.show);
 
 /* ---- USUÁRIO ENDEREÇOS ---- */
 // -- CRUD Endereço do usuário
-/*routes.post("/usuario/:usr_id/endereco", enderecosUsuarioController.store);
+routes.post("/usuario/:usr_id/endereco", enderecosUsuarioController.store);
 routes.put("/usuario/:usr_id/endereco/:id", enderecosUsuarioController.update);
 routes.delete(
   "/usuario/:usr_id/endereco/:id",
@@ -49,6 +50,6 @@ routes.delete(
 );
 // -- Todos os endereços de um usuário
 routes.get("/usuario/:usr_id/enderecos", enderecosUsuarioController.index);
-routes.get("/usuario/:usr_id/enderecos/:id", enderecosUsuarioController.show);*/
+routes.get("/usuario/:usr_id/endereco/:id", enderecosUsuarioController.show);
 
 module.exports = routes;

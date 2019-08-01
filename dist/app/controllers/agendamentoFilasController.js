@@ -2,19 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = require("../models");
 const responsePattern_1 = require("../../config/responsePattern");
-const baseurlApp_1 = require("../Utils/baseurlApp");
-const usuarioValidator_1 = require("../validators/usuarioValidator");
-class usuariosController {
+//const redisEmail = require("./redis/redisEmail");
+const filasValidator_1 = require("../validators/filasValidator");
+const emailValidator_1 = require("../validators/emailValidator");
+class enderecosUsuarioController {
     async index(req, res, next) {
         try {
-            const usuarios = await models_1.default.Usuarios.findAll({
-                include: [{ model: models_1.default.UsuarioEnderecos, as: "enderecos" }]
-            });
-            await usuarios.map(async (usuario) => {
-                usuario.avatar = await showAvatar(usuario.avatar);
-            });
+            const filas = await models_1.default.Filas.findAll();
             responsePattern_1.default.statusCode = 200;
-            responsePattern_1.default.data = usuarios;
+            responsePattern_1.default.data = filas;
             next(responsePattern_1.default);
             return;
         }
@@ -34,10 +30,9 @@ class usuariosController {
                 next(responsePattern_1.default);
                 return;
             }
-            const usuario = await models_1.default.Usuarios.findById(id);
-            usuario.avatar = await showAvatar(usuario.avatar);
+            const fila = await models_1.default.Filas.findById(id);
             responsePattern_1.default.statusCode = 200;
-            responsePattern_1.default.data = usuario;
+            responsePattern_1.default.data = fila;
             next(responsePattern_1.default);
             return;
         }
@@ -51,24 +46,36 @@ class usuariosController {
     async store(req, res, next) {
         try {
             const { body } = req;
-            const { error } = usuarioValidator_1.usuarioStore.validate(body);
+            let fila = {};
+            const { error } = filasValidator_1.filas.validate(body);
             if (error) {
                 responsePattern_1.default.statusCode = 400;
                 responsePattern_1.default.message = error.message;
                 next(responsePattern_1.default);
                 return;
             }
-            const { email } = body;
-            const isExiste = await models_1.default.Usuarios.find({ where: { email } });
-            if (isExiste) {
-                responsePattern_1.default.statusCode = 400;
-                responsePattern_1.default.message = "Já existe um usuário com este e-mail!";
-                next(responsePattern_1.default);
-                return;
+            switch (body.tipo) {
+                case 1:
+                    const { error } = emailValidator_1.emailValidator.validate(body.conteudoJson);
+                    if (error) {
+                        responsePattern_1.default.statusCode = 400;
+                        responsePattern_1.default.message = error.message;
+                        next(responsePattern_1.default);
+                        return;
+                    }
+                    const isOk = false;
+                    //const isOk = await redisEmail.store(body.conteudoJson);
+                    if (!isOk) {
+                        body.status = 1;
+                        body.conteudoJson = JSON.stringify(body.conteudoJson);
+                        fila = await models_1.default.Filas.create(body);
+                    }
+                    break;
+                default:
+                    break;
             }
-            const usuario = await models_1.default.Usuarios.create(body);
             responsePattern_1.default.statusCode = 200;
-            responsePattern_1.default.data = usuario;
+            responsePattern_1.default.data = fila;
             next(responsePattern_1.default);
             return;
         }
@@ -81,7 +88,7 @@ class usuariosController {
     }
     async update(req, res, next) {
         try {
-            const { body, params, usr_id } = req;
+            const { body, params } = req;
             const { id } = params;
             if (!id) {
                 responsePattern_1.default.statusCode = 400;
@@ -89,11 +96,9 @@ class usuariosController {
                 next(responsePattern_1.default);
                 return;
             }
-            const usuarioUpdate = await models_1.default.Usuarios.findById(id);
-            await usuarioUpdate.update(body);
-            const usuario = await usuarioUpdate;
+            const fila = await models_1.default.Filas.update(body, { where: { id } });
             responsePattern_1.default.statusCode = 200;
-            responsePattern_1.default.data = usuario;
+            responsePattern_1.default.data = fila;
             next(responsePattern_1.default);
             return;
         }
@@ -106,17 +111,16 @@ class usuariosController {
     }
     async destroy(req, res, next) {
         try {
-            const { body, usr_id, params } = req;
-            const { id } = params;
+            const { id } = req.params;
             if (!id) {
                 responsePattern_1.default.statusCode = 400;
-                responsePattern_1.default.message = "É necessário informar o id!";
+                responsePattern_1.default.message = "É necessário informar o id e o usuário!";
                 next(responsePattern_1.default);
                 return;
             }
-            const usuario = await models_1.default.Usuarios.destroy({ where: { id } });
+            const fila = await models_1.default.Filas.destroy({ where: { id } });
             responsePattern_1.default.statusCode = 200;
-            responsePattern_1.default.data = usuario;
+            responsePattern_1.default.data = fila;
             next(responsePattern_1.default);
             return;
         }
@@ -127,39 +131,5 @@ class usuariosController {
             return;
         }
     }
-    async storeAvatar(req, res, next) {
-        /* try {
-          const pathAvatar = req.file.key;
-          const { usr_id, id } = req;
-    
-          const usuario = await usuariosModel
-            .query()
-            .updateAndFetchById(id, { avatar: pathAvatar });
-    
-          usuario.avatar = req.file.location;
-    
-          response.statusCode = 200;
-          response.data = usuario;
-          next(response);
-        } catch (error) {
-          response.statusCode = 500;
-          response.message = error.message;
-          next(response);
-          return;
-        }*/
-        return;
-    }
 }
-function showAvatar(avatar) {
-    let url;
-    if (avatar) {
-        if (process.env.UPLOAD_METHOD === "S3") {
-            url = `${process.env.URL_CLOUD_STORAGE}/${encodeURIComponent(avatar)}`;
-        }
-        else {
-            url = `${baseurlApp_1.default}/files/${encodeURIComponent(avatar)}`;
-        }
-    }
-    return url;
-}
-exports.default = new usuariosController();
+exports.default = new enderecosUsuarioController();
