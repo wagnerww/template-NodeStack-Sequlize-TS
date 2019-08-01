@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt = require("bcryptjs");
-function default_1(sequelize, DataTypes) {
+exports.default = (sequelize, DataTypes) => {
     const Usuarios = sequelize.define("Usuarios", {
         id: {
             type: DataTypes.INTEGER,
@@ -53,32 +53,16 @@ function default_1(sequelize, DataTypes) {
                 }
             }
         }
-        /* hooks: {
-          beforeCreate: (
-            user: UserInstance,
-            options: Sequelize.CreateOptions
-          ): void => {
-            const salt = genSaltSync();
-            user.password = hashSync(user.password, salt);
-          },
-          beforeUpdate: (
-            user: UserInstance,
-            options: Sequelize.CreateOptions
-          ): void => {
-            if (user.changed("password")) {
-              const salt = genSaltSync();
-              user.password = hashSync(user.password, salt);
-            }
-          }*/
     });
-    /* User.associate = (models: ModelsInterface): void => {};
-  
-    User.prototype.isPassword = (
-      encodedPassword: string,
-      password: string
-    ): boolean => {
-      return compareSync(password, encodedPassword);
-    };*/
+    Usuarios.associate = (models) => {
+        Usuarios.hasMany(models.UsuarioEnderecos, {
+            as: "enderecos",
+            foreignKey: "usr_id"
+        });
+    };
+    /* Usuarios.hasMany(, {
+      as: "enderecos",
+      foreignKey: "usr_id"
+    });*/
     return Usuarios;
-}
-exports.default = default_1;
+};

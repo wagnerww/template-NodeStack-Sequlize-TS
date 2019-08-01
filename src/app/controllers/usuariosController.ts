@@ -14,7 +14,9 @@ import { usuarioStore } from "../validators/usuarioValidator";
 class usuariosController {
   async index(req: HttpRequestUsuario, res: HttpResponse, next: Next) {
     try {
-      const usuarios = await db.Usuarios.findAll();
+      const usuarios = await db.Usuarios.findAll({
+        include: [{ model: db.UsuarioEnderecos, as: "enderecos" }]
+      });
 
       await usuarios.map(async usuario => {
         usuario.avatar = await showAvatar(usuario.avatar);

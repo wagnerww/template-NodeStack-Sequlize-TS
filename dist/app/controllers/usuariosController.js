@@ -7,7 +7,9 @@ const usuarioValidator_1 = require("../validators/usuarioValidator");
 class usuariosController {
     async index(req, res, next) {
         try {
-            const usuarios = await models_1.default.Usuarios.findAll();
+            const usuarios = await models_1.default.Usuarios.findAll({
+                include: [{ model: models_1.default.UsuarioEnderecos }]
+            });
             await usuarios.map(async (usuario) => {
                 usuario.avatar = await showAvatar(usuario.avatar);
             });

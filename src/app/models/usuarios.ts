@@ -1,5 +1,8 @@
 import * as Sequelize from "sequelize";
 import * as bcrypt from "bcryptjs";
+import { BaseModelInterface } from "../interfaces/BaseModelInterface";
+import { ModelsInterface } from "../interfaces/ModelsInterface";
+import { IUsuarioEnderecos } from "./usuarioEnderecos";
 
 export interface IUsuarios {
   id?: number;
@@ -11,16 +14,22 @@ export interface IUsuarios {
   perfil?: string;
   createdAt?: string;
   updatedAt?: string;
+  enderecos?: IUsuarioEnderecos[];
 }
 
-export type UsuarioInstance = Sequelize.Instance<IUsuarios> & IUsuarios;
-type UsuarioModel = Sequelize.Model<UsuarioInstance, IUsuarios>;
+export interface UsuarioInstance
+  extends Sequelize.Instance<IUsuarios>,
+    IUsuarios {}
 
-export default function(
+export interface UsuarioModel
+  extends BaseModelInterface,
+    Sequelize.Model<UsuarioInstance, IUsuarios> {}
+
+export default (
   sequelize: Sequelize.Sequelize,
   DataTypes: Sequelize.DataTypes
-): UsuarioModel {
-  const Usuarios = sequelize.define<UsuarioInstance, IUsuarios>(
+): UsuarioModel => {
+  const Usuarios: UsuarioModel = sequelize.define(
     "Usuarios",
     {
       id: {
@@ -83,5 +92,17 @@ export default function(
     }
   );
 
+  Usuarios.associate = (models: ModelsInterface) => {
+    Usuarios.hasMany(models.UsuarioEnderecos, {
+      as: "enderecos",
+      foreignKey: "usr_id"
+    });
+  };
+
+  /* Usuarios.hasMany(, {
+    as: "enderecos",
+    foreignKey: "usr_id"
+  });*/
+
   return Usuarios;
-}
+};

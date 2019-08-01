@@ -1,4 +1,6 @@
 import * as Sequelize from "sequelize";
+import { BaseModelInterface } from "../interfaces/BaseModelInterface";
+import { ModelsInterface } from "../interfaces/ModelsInterface";
 
 export interface IUsuarioEnderecos {
   id: number;
@@ -9,23 +11,22 @@ export interface IUsuarioEnderecos {
   cidade?: string;
   createdAt?: string;
   updatedAt?: string;
+  //usuario: ;
 }
 
-export type UsuarioEnderecosInstance = Sequelize.Instance<IUsuarioEnderecos> &
-  IUsuarioEnderecos;
-type UsuarioModel = Sequelize.Model<
-  UsuarioEnderecosInstance,
-  IUsuarioEnderecos
->;
+export interface UsuarioEnderecosInstance
+  extends Sequelize.Instance<IUsuarioEnderecos>,
+    IUsuarioEnderecos {}
 
-export default function(
+export interface UsuarioEnderecosModel
+  extends BaseModelInterface,
+    Sequelize.Model<UsuarioEnderecosInstance, IUsuarioEnderecos> {}
+
+export default (
   sequelize: Sequelize.Sequelize,
   DataTypes: Sequelize.DataTypes
-): UsuarioModel {
-  const Usuarios = sequelize.define<
-    UsuarioEnderecosInstance,
-    IUsuarioEnderecos
-  >(
+): UsuarioEnderecosModel => {
+  const UsuarioEndereco: UsuarioEnderecosModel = sequelize.define(
     "UsuarioEnderecos",
     {
       id: {
@@ -63,5 +64,15 @@ export default function(
     }
   );
 
-  return Usuarios;
-}
+  UsuarioEndereco.associate = (models: ModelsInterface) => {
+    UsuarioEndereco.belongsTo(models.Usuarios, {
+      foreignKey: {
+        allowNull: false,
+        field: "usr_id",
+        name: "usr_id"
+      }
+    });
+  };
+
+  return UsuarioEndereco;
+};
