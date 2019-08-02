@@ -1,10 +1,10 @@
 import db from "../models";
+
 import {
   HttpRequestUsuario,
   HttpResponse,
   Next
 } from "../interfaces/HttpInterface";
-import * as bcrypt from "bcryptjs";
 
 import response from "../../config/responsePattern";
 import urlApp from "../Utils/baseurlApp";

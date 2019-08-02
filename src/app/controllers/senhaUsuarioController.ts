@@ -1,17 +1,28 @@
-const usuariosModel = require("../models/usuarios");
-const bcrypt = require("bcryptjs");
+import db from "../models";
 
-const agendamentoFilasController = require("./agendamentoFilasController");
-const response = require("../../config/responsePattern");
-const urlApp = require("../Utils/baseurlApp");
-const encryptDecrypt = require("../Utils/encryptDecryptHash");
-const {
-  recuperarSenha,
-  trocarSenha
-} = require("../validators/usuarioValidator");
+import {
+  HttpRequestRecuperacaoSenha,
+  HttpRequestFilas,
+  HttpResponse,
+  Next
+} from "../interfaces/HttpInterface";
+
+import { IResponseHandler } from "../interfaces/responseHandler";
+import { ICorpoFila, ICorpoFilaEmailCorpoEmail } from "../models/filas";
+
+import agendamentoFilasController from "./agendamentoFilasController";
+import response from "../../config/responsePattern";
+import urlApp from "../Utils/baseurlApp";
+import encryptDecrypt from "../Utils/encryptDecryptHash";
+
+import { recuperarSenha, trocarSenha } from "../validators/usuarioValidator";
 
 class senhaUsuarioController {
-  async recuperarSenha(req, res, next) {
+  async recuperarSenha(
+    req: HttpRequestRecuperacaoSenha,
+    res: HttpResponse,
+    next: Next
+  ) {
     try {
       const { body } = req;
 
@@ -25,10 +36,7 @@ class senhaUsuarioController {
       }
 
       const { email } = body;
-      const usuario = await usuariosModel
-        .query()
-        .where({ email })
-        .first();
+      const usuario = await db.Usuarios.findOne({ where: { email } });
 
       if (!usuario) {
         response.statusCode = 400;
@@ -39,15 +47,17 @@ class senhaUsuarioController {
 
       const hash = await encryptDecrypt.encrypt(usuario.id);
 
-      const recuperacaoSenha = {
+      const recuperacaoSenha = <HttpRequestFilas>{
         body: {
           tipo: 1,
-          conteudoJson: {
-            destinatario: body.email,
-            assunto: "Recuperação de senha...🕵",
-            corpoEmail: {
-              nome: usuario.nome,
-              link: `http://localhost:3000/trocarsenha/${hash}`
+          corpoFila: <ICorpoFila>{
+            email: {
+              assunto: "Recuperação de senha...🕵",
+              destinatario: body.email,
+              corpoEmail: <ICorpoFilaEmailCorpoEmail>{
+                nome: usuario.nome,
+                link: `${urlApp}/${hash}`
+              }
             }
           }
         }
@@ -58,7 +68,7 @@ class senhaUsuarioController {
       };
 
       await agendamentoFilasController.store(recuperacaoSenha, res, function(
-        nextFilas
+        nextFilas: IResponseHandler
       ) {
         if (nextFilas.statusCode === 200) {
           retorno.mensagem =
@@ -77,7 +87,11 @@ class senhaUsuarioController {
     }
   }
 
-  async trocarSenha(req, res, next) {
+  async trocarSenha(
+    req: HttpRequestRecuperacaoSenha,
+    res: HttpResponse,
+    next: Next
+  ) {
     try {
       const { body, params } = req;
 
@@ -110,12 +124,7 @@ class senhaUsuarioController {
         return;
       }
 
-      body.senha = await bcrypt.hash(body.senha, 8);
-
-      await usuariosModel
-        .query()
-        .update(body)
-        .where({ id });
+      await db.Usuarios.update(body, { where: { id } });
 
       const retorno = {
         mensagem: "Troca de senha realizada com sucesso"
@@ -133,4 +142,4 @@ class senhaUsuarioController {
   }
 }
 
-module.exports = new senhaUsuarioController();
+export default new senhaUsuarioController();

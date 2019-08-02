@@ -34,6 +34,13 @@ export interface HttpRequestFilas extends HttpRequest {
   body: IFilas;
 }
 
+export interface HttpRequestRecuperacaoSenha extends HttpRequest {
+  params: {
+    hash: string;
+  };
+  body: IUsuarios;
+}
+
 export interface HttpResponse extends Response {}
 
 export interface Next extends NextFunction {}

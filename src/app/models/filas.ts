@@ -3,10 +3,15 @@ import * as Sequelize from "sequelize";
 import { BaseModelInterface } from "../interfaces/BaseModelInterface";
 import { ModelsInterface } from "../interfaces/ModelsInterface";
 
+export interface ICorpoFilaEmailCorpoEmail {
+  nome: string;
+  link: string;
+}
+
 export interface ICorpoFilaEmail {
   destinatario: string;
   assunto: string;
-  corpoEmail: string;
+  corpoEmail: ICorpoFilaEmailCorpoEmail;
 }
 
 export interface ICorpoFila {
@@ -59,11 +64,11 @@ export default (
       },
       corpoFila: {
         type: DataTypes.VIRTUAL,
-        //De quem para o corpo fila
+        //Do conteudoJson para o corpoFila
         get: function() {
           return this.conteudoJson ? JSON.parse(this.conteudoJson) : null;
         },
-        //o corpo fila para quem
+        //Do corpoFila para conteudoJson
         set: function(val) {
           this.setDataValue("conteudoJson", JSON.stringify(val));
         }

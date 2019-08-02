@@ -22,9 +22,11 @@ exports.default = (sequelize, DataTypes) => {
         },
         corpoFila: {
             type: DataTypes.VIRTUAL,
+            //Do conteudoJson para o corpoFila
             get: function () {
                 return this.conteudoJson ? JSON.parse(this.conteudoJson) : null;
             },
+            //Do corpoFila para conteudoJson
             set: function (val) {
                 this.setDataValue("conteudoJson", JSON.stringify(val));
             }

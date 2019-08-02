@@ -29,4 +29,4 @@ class EncryptDecrypt {
   }
 }
 
-module.exports = new EncryptDecrypt();
+export default new EncryptDecrypt();

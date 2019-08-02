@@ -1,14 +1,18 @@
+import db from "../models";
+
 import {
   HttpRequestSession,
   HttpResponse,
   Next
 } from "../interfaces/HttpInterface";
+
 import * as jwt from "jsonwebtoken";
 import * as bcrypt from "bcryptjs";
-import db from "../models";
-import { sessaoSchema as sessaoValidator } from "../validators/sessaoValidator";
+
 import response from "../../config/responsePattern";
 import authConfig from "../../config/auth";
+
+import { sessaoSchema as sessaoValidator } from "../validators/sessaoValidator";
 
 class SessionController {
   async store(req: HttpRequestSession, res: HttpResponse, next: Next) {

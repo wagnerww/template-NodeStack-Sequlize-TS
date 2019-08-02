@@ -1,9 +1,11 @@
 import db from "../models";
+
 import {
   HttpRequestUsuarioEnderecos,
   HttpResponse,
   Next
 } from "../interfaces/HttpInterface";
+
 import response from "../../config/responsePattern";
 
 class enderecosUsuarioController {

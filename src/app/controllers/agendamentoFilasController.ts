@@ -8,6 +8,7 @@ import response from "../../config/responsePattern";
 //const redisEmail = require("./redis/redisEmail");
 
 import { filas } from "../validators/filas/filasValidator";
+
 import { emailValidator } from "../validators/filas/emailValidator";
 
 class enderecosUsuarioController {
