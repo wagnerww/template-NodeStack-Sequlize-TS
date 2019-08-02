@@ -29,6 +29,7 @@ routes.get("/usuarios", usuariosController.index);
 ///* ---- FILAS ---- */
 routes.post("/filas", agendamentoFilasController.store);
 routes.get("/filas", agendamentoFilasController.index);
+routes.put("/fila/:id", agendamentoFilasController.update);
 
 ///* ---- USUÁRIO ---- */
 routes.put("/usuario/:id", usuariosController.update);

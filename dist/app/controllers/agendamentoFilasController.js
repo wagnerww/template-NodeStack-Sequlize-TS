@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = require("../models");
 const responsePattern_1 = require("../../config/responsePattern");
 //const redisEmail = require("./redis/redisEmail");
-const filasValidator_1 = require("../validators/filasValidator");
-const emailValidator_1 = require("../validators/emailValidator");
+const filasValidator_1 = require("../validators/filas/filasValidator");
+const emailValidator_1 = require("../validators/filas/emailValidator");
 class enderecosUsuarioController {
     async index(req, res, next) {
         try {
@@ -56,7 +56,7 @@ class enderecosUsuarioController {
             }
             switch (body.tipo) {
                 case 1:
-                    const { error } = emailValidator_1.emailValidator.validate(body.conteudoJson);
+                    const { error } = emailValidator_1.emailValidator.validate(body.corpoFila);
                     if (error) {
                         responsePattern_1.default.statusCode = 400;
                         responsePattern_1.default.message = error.message;
@@ -67,7 +67,6 @@ class enderecosUsuarioController {
                     //const isOk = await redisEmail.store(body.conteudoJson);
                     if (!isOk) {
                         body.status = 1;
-                        body.conteudoJson = JSON.stringify(body.conteudoJson);
                         fila = await models_1.default.Filas.create(body);
                     }
                     break;

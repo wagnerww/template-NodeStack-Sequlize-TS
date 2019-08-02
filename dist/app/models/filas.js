@@ -20,6 +20,15 @@ exports.default = (sequelize, DataTypes) => {
             type: DataTypes.STRING(10000),
             allowNull: false
         },
+        corpoFila: {
+            type: DataTypes.VIRTUAL,
+            get: function () {
+                return this.conteudoJson ? JSON.parse(this.conteudoJson) : null;
+            },
+            set: function (val) {
+                this.setDataValue("conteudoJson", JSON.stringify(val));
+            }
+        },
         qtdExecucao: {
             type: DataTypes.INTEGER,
             allowNull: true,
@@ -32,6 +41,17 @@ exports.default = (sequelize, DataTypes) => {
         }
     }, {
         tableName: "filas"
+        /*hooks: {
+          beforeValidate: async (
+            fila: FilasInstance,
+            options: Sequelize.CreateOptions
+          ) => {
+            if (fila.corpoFila) {
+              console.log("chegou", fila.corpoFila);
+              fila.conteudoJson = JSON.stringify(fila.corpoFila);
+            }
+          }
+        }*/
     });
     return Filas;
 };

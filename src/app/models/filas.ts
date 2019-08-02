@@ -3,21 +3,23 @@ import * as Sequelize from "sequelize";
 import { BaseModelInterface } from "../interfaces/BaseModelInterface";
 import { ModelsInterface } from "../interfaces/ModelsInterface";
 
-export interface IConteudoJSONEmail {
+export interface ICorpoFilaEmail {
   destinatario: string;
   assunto: string;
   corpoEmail: string;
 }
 
-export interface IConteudoJSON {
-  Email?: IConteudoJSONEmail;
+export interface ICorpoFila {
+  email?: ICorpoFilaEmail;
+  conteudoJsonRaw: string;
 }
 
 export interface IFilas {
   id?: number;
   tipo?: number;
   status?: number;
-  conteudoJson?: IConteudoJSON;
+  conteudoJson?: string;
+  corpoFila: ICorpoFila;
   qtdExecucao?: number;
   observacao?: string;
   createdAt?: string;
@@ -55,6 +57,17 @@ export default (
         type: DataTypes.STRING(10000),
         allowNull: false
       },
+      corpoFila: {
+        type: DataTypes.VIRTUAL,
+        //De quem para o corpo fila
+        get: function() {
+          return this.conteudoJson ? JSON.parse(this.conteudoJson) : null;
+        },
+        //o corpo fila para quem
+        set: function(val) {
+          this.setDataValue("conteudoJson", JSON.stringify(val));
+        }
+      },
       qtdExecucao: {
         type: DataTypes.INTEGER,
         allowNull: true,
@@ -68,6 +81,17 @@ export default (
     },
     {
       tableName: "filas"
+      /*hooks: {
+        beforeValidate: async (
+          fila: FilasInstance,
+          options: Sequelize.CreateOptions
+        ) => {
+          if (fila.corpoFila) {
+            console.log("chegou", fila.corpoFila);
+            fila.conteudoJson = JSON.stringify(fila.corpoFila);
+          }
+        }
+      }*/
     }
   );
 

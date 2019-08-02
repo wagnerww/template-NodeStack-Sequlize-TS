@@ -5,7 +5,7 @@ export const filas = Joi.object()
     tipo: Joi.number()
       .required()
       .error(new Error("Tipo da fila é obrigatório"), {}),
-    conteudoJson: Joi.object()
+    corpoFila: Joi.object()
       .required()
       .error(new Error("Conteúdo da fila é obrigatório é obrigatório"), {})
   })

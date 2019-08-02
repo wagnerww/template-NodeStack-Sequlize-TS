@@ -7,8 +7,8 @@ import {
 import response from "../../config/responsePattern";
 //const redisEmail = require("./redis/redisEmail");
 
-import { filas } from "../validators/filasValidator";
-import { emailValidator } from "../validators/emailValidator";
+import { filas } from "../validators/filas/filasValidator";
+import { emailValidator } from "../validators/filas/emailValidator";
 
 class enderecosUsuarioController {
   async index(req: HttpRequestFilas, res: HttpResponse, next: Next) {
@@ -68,7 +68,7 @@ class enderecosUsuarioController {
 
       switch (body.tipo) {
         case 1:
-          const { error } = emailValidator.validate(body.conteudoJson);
+          const { error } = emailValidator.validate(body.corpoFila);
 
           if (error) {
             response.statusCode = 400;
@@ -80,7 +80,7 @@ class enderecosUsuarioController {
           //const isOk = await redisEmail.store(body.conteudoJson);
           if (!isOk) {
             body.status = 1;
-            body.conteudoJson = JSON.stringify(body.conteudoJson);
+
             fila = await db.Filas.create(body);
           }
           break;
