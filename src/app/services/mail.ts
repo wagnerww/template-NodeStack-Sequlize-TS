@@ -1,14 +1,14 @@
 require("dotenv").config();
-const nodemailer = require("nodemailer");
-const path = require("path");
-const hbs = require("nodemailer-express-handlebars");
-const exphbs = require("express-handlebars");
+import * as nodemailer from "nodemailer";
+import * as path from "path";
+import * as hbs from "nodemailer-express-handlebars";
+import * as exphbs from "express-handlebars";
 
 //send("Atleta vc está quase lá...🕵", "wagnerricardonet@gmail.com");
 
-async function send(assunto, paraQuem, corpoEmail, templateEmail) {
-  let isEnviado;
-  errorDescription = "";
+async function send(assunto, paraQuem, corpoEmail, templateEmail: string) {
+  let isEnviado: boolean;
+  let errorDescription: string = "";
   /* MAIL GUN
  var api_key = "";
   var domain = "";
@@ -52,6 +52,8 @@ async function send(assunto, paraQuem, corpoEmail, templateEmail) {
       from: `${process.env.MAIL_FROM_NAME} <${process.env.MAIL_FROM_EMAIL}>`, //De quem
       to: paraQuem,
       subject: assunto,
+
+      text: corpoEmail,
       /* text: corpoEmail, //texto html, isso é um escape se o email bloquear o body do html
        html: templateEmail ? "" : corpoEmail, //corpo do html,*/
       template: templateEmail,
@@ -66,4 +68,4 @@ async function send(assunto, paraQuem, corpoEmail, templateEmail) {
   return { isEnviado, errorDescription };
 }
 
-module.exports = send;
+export default send;

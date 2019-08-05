@@ -1,4 +1,4 @@
-const redis = require("../../../config/redis");
+import redis from "../../../config/redis";
 
 class redisEmailController {
   /* async index(req, res, next) {
@@ -19,7 +19,7 @@ class redisEmailController {
 
   async store(conteudo) {
     const value = JSON.stringify(conteudo);
-    const redisError = await redis.SADD("sendEmail", value, function(
+    const redisError: boolean = await redis.SADD("sendEmail", value, function(
       err,
       success
     ) {
@@ -65,4 +65,4 @@ class redisEmailController {
   }*/
 }
 
-module.exports = new redisEmailController();
+export default new redisEmailController();

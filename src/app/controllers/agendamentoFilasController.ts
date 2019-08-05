@@ -5,7 +5,7 @@ import {
   Next
 } from "../interfaces/HttpInterface";
 import response from "../../config/responsePattern";
-//const redisEmail = require("./redis/redisEmail");
+import redisEmail from "./redis/redisEmail";
 
 import { filas } from "../validators/filas/filasValidator";
 
@@ -77,8 +77,8 @@ class enderecosUsuarioController {
             next(response);
             return;
           }
-          const isOk = false;
-          //const isOk = await redisEmail.store(body.conteudoJson);
+
+          const isOk: boolean = await redisEmail.store(body.conteudoJson);
           if (!isOk) {
             body.status = 1;
 

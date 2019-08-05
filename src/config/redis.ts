@@ -1,6 +1,6 @@
-const redis = require("redis");
-const host = "localhost";
-const port = "6379";
+import * as redis from "redis";
+const host: string = "localhost";
+const port: number = 6379;
 const client = redis.createClient(port, host);
 
 client.on("connect", function() {
@@ -13,4 +13,4 @@ client.on("error", function(err) {
   console.log("==> Falha na conexão com o REDIS: " + err);
 });
 
-module.exports = client;
+export default client;

@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const models_1 = require("../models");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const models_1 = require("../models");
-const sessaoValidator_1 = require("../validators/sessaoValidator");
 const responsePattern_1 = require("../../config/responsePattern");
 const auth_1 = require("../../config/auth");
+const sessaoValidator_1 = require("../validators/sessaoValidator");
 class SessionController {
     async store(req, res, next) {
         const { body } = req;

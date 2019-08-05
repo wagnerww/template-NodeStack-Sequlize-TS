@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = require("../models");
 const responsePattern_1 = require("../../config/responsePattern");
-//const redisEmail = require("./redis/redisEmail");
+const redisEmail_1 = require("./redis/redisEmail");
 const filasValidator_1 = require("../validators/filas/filasValidator");
 const emailValidator_1 = require("../validators/filas/emailValidator");
 class enderecosUsuarioController {
@@ -63,8 +63,7 @@ class enderecosUsuarioController {
                         next(responsePattern_1.default);
                         return;
                     }
-                    const isOk = false;
-                    //const isOk = await redisEmail.store(body.conteudoJson);
+                    const isOk = await redisEmail_1.default.store(body.conteudoJson);
                     if (!isOk) {
                         body.status = 1;
                         fila = await models_1.default.Filas.create(body);
