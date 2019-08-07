@@ -1,26 +1,24 @@
 require("dotenv").config();
-import * as nodemailer from "nodemailer";
-import * as path from "path";
-import * as hbs from "nodemailer-express-handlebars";
-import * as exphbs from "express-handlebars";
+const nodemailer = require("nodemailer");
+const path = require("path");
+const hbs = require("nodemailer-express-handlebars");
+const exphbs = require("express-handlebars");
 
 //send("Atleta vc está quase lá...🕵", "wagnerricardonet@gmail.com");
 
-async function send(assunto, paraQuem, corpoEmail, templateEmail: string) {
-  let isEnviado: boolean;
-  let errorDescription: string = "";
+async function send(assunto, paraQuem, corpoEmail, templateEmail) {
+  let isEnviado;
+  let errorDescription = "";
   /* MAIL GUN
  var api_key = "";
   var domain = "";
   var mailgun = require("mailgun-js")({ apiKey: api_key, domain: domain });
-
   var data = {
     from: "Excited User <wagnerricardonet@gmail.com>",
     to: "wagnerricardonet@gmail.com",
     subject: "Hello",
     text: "vai"
   };
-
   mailgun.messages().send(data, function(error, body) {
     console.log(body);
   });*/
@@ -52,8 +50,6 @@ async function send(assunto, paraQuem, corpoEmail, templateEmail: string) {
       from: `${process.env.MAIL_FROM_NAME} <${process.env.MAIL_FROM_EMAIL}>`, //De quem
       to: paraQuem,
       subject: assunto,
-
-      text: corpoEmail,
       /* text: corpoEmail, //texto html, isso é um escape se o email bloquear o body do html
        html: templateEmail ? "" : corpoEmail, //corpo do html,*/
       template: templateEmail,
@@ -68,4 +64,4 @@ async function send(assunto, paraQuem, corpoEmail, templateEmail: string) {
   return { isEnviado, errorDescription };
 }
 
-export default send;
+module.exports = send;

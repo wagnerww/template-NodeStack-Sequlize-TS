@@ -12,6 +12,7 @@
     "@types/node": "^12.6.8",
     "@types/node-schedule": "^1.2.3",
     "@types/nodemailer": "^6.2.1",
+    "@types/pug": "^2.0.4",
     "@types/redis": "^2.8.13",
     "@types/sequelize": "4.27.2",
     "types-joi": "^1.0.13",
@@ -32,6 +33,7 @@
     "nodemailer": "^6.3.0",
     "nodemailer-express-handlebars": "^3.1.0",
     "pg": "^7.12.0",
+    "pug": "^2.0.4",
     "redis": "^2.8.0",
     "sequelize": "4.31.2",
     "youch": "^2.0.10"
@@ -39,6 +41,6 @@
   "scripts": {
     "dev": "NODE_ENV=development node ./dist/index.js",
     "prod": "NODE_ENV=production node ./dist/index.js",
-    "emails": "node src/app/jobs/emails.js"
+    "emails": "node ./dist/app/jobs/emails.js"
   }
 }
