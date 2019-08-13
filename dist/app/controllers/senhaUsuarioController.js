@@ -34,8 +34,10 @@ class senhaUsuarioController {
                             assunto: "Recuperação de senha...🕵",
                             destinatario: body.email,
                             corpoEmail: {
-                                nome: usuario.nome,
-                                link: `${baseurlApp_1.default}/${hash}`
+                                recuperacaoSenha: {
+                                    nome: usuario.nome,
+                                    link: `${baseurlApp_1.default}/${hash}`
+                                }
                             }
                         }
                     }

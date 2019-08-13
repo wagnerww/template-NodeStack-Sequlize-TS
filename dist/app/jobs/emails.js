@@ -13,10 +13,10 @@ class enviarEmail {
                     for (let i in values) {
                         let value = values[i];
                         let jsonEmail = JSON.parse(value);
+                        const enviarEmailRef = new enviarEmail();
                         //Envia o email
-                        const { isEnviado, errorDescription } = await this.env(jsonEmail);
-                        if (isEnviado)
-                            redis_1.default.SREM("sendEmail", value);
+                        const { isEnviado, errorDescription } = await enviarEmailRef.enviaEmail(jsonEmail);
+                        // if (isEnviado) redis.SREM("sendEmail", value);
                     }
             });
         };
@@ -36,9 +36,18 @@ class enviarEmail {
             }));
         };
         this.enviaEmail = async (jsonEmail) => {
-            const { assunto, destinatario, corpoEmail } = jsonEmail;
+            let template = "";
             //envia o email
-            const resEmail = await mail_1.default(assunto, destinatario, corpoEmail, "recuperacaoSenha");
+            /* switch (jsonEmail.email.corpoEmail) {
+              case jsonEmail.email.corpoEmail.recuperacaoSenha:
+                template = "recuperacaoSenha";
+                break;
+        
+              default:
+                break;
+            }*/
+            template = "recuperacaoSenha";
+            const resEmail = await mail_1.default(jsonEmail.email, template);
             const { isEnviado, errorDescription } = resEmail;
             return { isEnviado, errorDescription };
         };
@@ -48,6 +57,6 @@ const job = schedule.scheduleJob("0-59/5 * * * * *", async (date) => {
     exec += 1;
     const enviarEmailExec = new enviarEmail();
     await enviarEmailExec.enviarEmailRedis();
-    await enviarEmailExec.enivarEmailFilas();
+    // await enviarEmailExec.enivarEmailFilas();
     console.log(`execução número:${exec}, hora:${date}`);
 });

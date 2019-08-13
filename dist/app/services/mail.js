@@ -3,10 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv").config();
 const nodemailer = require("nodemailer");
 const path = require("path");
-const nodemailer_express_handlebars_1 = require("nodemailer-express-handlebars");
-//import * as exphbs from "express-handlebars";
+const hbs = require("nodemailer-express-handlebars");
+const exphbs = require("express-handlebars");
 //send("Atleta vc está quase lá...🕵", "wagnerricardonet@gmail.com");
-async function send(assunto, paraQuem, corpoEmail, templateEmail) {
+async function send(emailConfig, templateEmail) {
+    const { assunto, destinatario, corpoEmail } = emailConfig;
     let isEnviado;
     let errorDescription = "";
     /* MAIL GUN
@@ -29,7 +30,7 @@ async function send(assunto, paraQuem, corpoEmail, templateEmail) {
             pass: process.env.MAIL_AUTH_SENHA
         }
     });
-    transporter.use("compile", nodemailer_express_handlebars_1.default({
+    transporter.use("compile", hbs({
         viewEngine: {
             extName: ".hbs",
             partialsDir: path.resolve(__dirname, "..", "views"),
@@ -42,18 +43,20 @@ async function send(assunto, paraQuem, corpoEmail, templateEmail) {
     try {
         let info = await transporter.sendMail({
             from: `${process.env.MAIL_FROM_NAME} <${process.env.MAIL_FROM_EMAIL}>`,
-            to: paraQuem,
+            to: destinatario,
             subject: assunto,
             /* text: corpoEmail, //texto html, isso é um escape se o email bloquear o body do html
              html: templateEmail ? "" : corpoEmail, //corpo do html,*/
-            html: templateEmail,
-            text: corpoEmail
+            template: templateEmail,
+            context: { corpoEmail }
         });
+        console.log("foi", info);
         isEnviado = true;
     }
     catch (error) {
         errorDescription = `Erro ao enviar o email: ${error}`;
         isEnviado = false;
+        console.log("erro", error);
     }
     return { isEnviado, errorDescription };
 }
