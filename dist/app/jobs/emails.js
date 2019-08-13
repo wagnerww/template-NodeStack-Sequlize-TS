@@ -16,17 +16,19 @@ class enviarEmail {
                         const enviarEmailRef = new enviarEmail();
                         //Envia o email
                         const { isEnviado, errorDescription } = await enviarEmailRef.enviaEmail(jsonEmail);
-                        // if (isEnviado) redis.SREM("sendEmail", value);
+                        if (isEnviado)
+                            redis_1.default.SREM("sendEmail", value);
                     }
             });
         };
         this.enivarEmailFilas = async () => {
             const filas = await models_1.default.Filas.findAll({ where: { tipo: 1, status: 1 } });
             const envio = await Promise.all(await filas.map(async (fila) => {
-                const jsonEmail = JSON.parse(fila.conteudoJson);
+                const jsonEmail = fila.corpoFila;
                 let qtdExecucao = fila.qtdExecucao + 1;
+                const enviarEmailRef = new enviarEmail();
                 //Envia o email
-                const { isEnviado, errorDescription } = await this.enviaEmail(jsonEmail);
+                const { isEnviado, errorDescription } = await enviarEmailRef.enviaEmail(jsonEmail);
                 if (isEnviado) {
                     await fila.update({ status: 3, qtdExecucao });
                 }
@@ -37,7 +39,7 @@ class enviarEmail {
         };
         this.enviaEmail = async (jsonEmail) => {
             let template = "";
-            //envia o email
+            //Testa o tipo de email da fila
             /* switch (jsonEmail.email.corpoEmail) {
               case jsonEmail.email.corpoEmail.recuperacaoSenha:
                 template = "recuperacaoSenha";
@@ -57,6 +59,6 @@ const job = schedule.scheduleJob("0-59/5 * * * * *", async (date) => {
     exec += 1;
     const enviarEmailExec = new enviarEmail();
     await enviarEmailExec.enviarEmailRedis();
-    // await enviarEmailExec.enivarEmailFilas();
+    await enviarEmailExec.enivarEmailFilas();
     console.log(`execução número:${exec}, hora:${date}`);
 });

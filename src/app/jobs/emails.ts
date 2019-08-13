@@ -31,7 +31,7 @@ class enviarEmail {
     const filas = await db.Filas.findAll({ where: { tipo: 1, status: 1 } });
     const envio = await Promise.all(
       await filas.map(async fila => {
-        const jsonEmail: ICorpoFila = JSON.parse(fila.conteudoJson);
+        const jsonEmail: ICorpoFila = fila.corpoFila;
         let qtdExecucao = fila.qtdExecucao + 1;
         const enviarEmailRef = new enviarEmail();
         //Envia o email
@@ -50,7 +50,7 @@ class enviarEmail {
   public enviaEmail = async (jsonEmail: ICorpoFila) => {
     let template: string = "";
 
-    //envia o email
+    //Testa o tipo de email da fila
     /* switch (jsonEmail.email.corpoEmail) {
       case jsonEmail.email.corpoEmail.recuperacaoSenha:
         template = "recuperacaoSenha";
