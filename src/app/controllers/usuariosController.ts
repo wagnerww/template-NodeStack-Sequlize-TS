@@ -3,7 +3,8 @@ import db from "../models";
 import {
   HttpRequestUsuario,
   HttpResponse,
-  Next
+  Next,
+  MulterFile
 } from "../interfaces/HttpInterface";
 
 import response from "../../config/responsePattern";
@@ -154,16 +155,22 @@ class usuariosController {
     }
   }
 
-  async storeAvatar(req: HttpRequestUsuario, res: HttpResponse, next: Next) {
-    /* try {
+  async storeAvatar(
+    req: HttpRequestUsuario & { file: MulterFile },
+    res: HttpResponse,
+    next: Next
+  ) {
+    try {
       const pathAvatar = req.file.key;
-      const { usr_id, id } = req;
 
-      const usuario = await usuariosModel
-        .query()
-        .updateAndFetchById(id, { avatar: pathAvatar });
+      const { id } = req.params;
 
-      usuario.avatar = req.file.location;
+      const usuario = await db.Usuarios.update(
+        { avatar: pathAvatar },
+        { where: { id } }
+      );
+
+      // usuario = req.file.location;
 
       response.statusCode = 200;
       response.data = usuario;
@@ -173,7 +180,7 @@ class usuariosController {
       response.message = error.message;
       next(response);
       return;
-    }*/
+    }
 
     return;
   }

@@ -2,11 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const routes = express.Router();
-/*const multer = require("multer");
+const multer = require("multer");
 const multerConfig = require("./config/multer");
-
-
-const authMiddleware = require("./app/middlewares/auth");*/
+/*const authMiddleware = require("./app/middlewares/auth");*/
 const usuariosController_1 = require("./app/controllers/usuariosController");
 //const senhaUsuarioController = require("./app/controllers/senhaUsuarioController");
 const enderecosUsuarioController_1 = require("./app/controllers/enderecosUsuarioController");
@@ -34,11 +32,7 @@ routes.delete("/fila/:id", agendamentoFilasController_1.default.destroy);
 routes.put("/usuario/:id", usuariosController_1.default.update);
 routes.delete("/usuario/:id", usuariosController_1.default.destroy);
 routes.get("/usuario/:id", usuariosController_1.default.show);
-/*routes.post(
-  "/usuario/:id/avatar",
-  multer(multerConfig).single("file"),
-  usuariosController.storeAvatar
-);*/
+routes.post("/usuario/:id/avatar", multer(multerConfig).single("file"), usuariosController_1.default.storeAvatar);
 /* ---- USUÁRIO ENDEREÇOS ---- */
 // -- CRUD Endereço do usuário
 routes.post("/usuario/:usr_id/endereco", enderecosUsuarioController_1.default.store);

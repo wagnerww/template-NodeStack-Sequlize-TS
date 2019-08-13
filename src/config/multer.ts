@@ -1,13 +1,15 @@
-const multer = require("multer");
-const path = require("path");
-const crypto = require("crypto");
-const multerS3 = require("multer-s3");
-const aws = require("aws-sdk");
+import * as multer from "multer";
+import * as path from "path";
+import * as crypto from "crypto";
+import * as multerS3 from "multer-s3";
+import * as aws from "aws-sdk";
 
 const destination = path.resolve(__dirname, "..", "..", "tmp");
 const stoageEndpoint = new aws.Endpoint("sfo2.digitaloceanspaces.com");
 const s3 = new aws.S3({
-  endpoint: stoageEndpoint,
+  // endpoint: stoageEndpoint,
+  endpoint: "sfo2.digitaloceanspaces.com",
+  // region: process.env.AWS_DEFAULT_REGION,
   accessKeyId: process.env.aws_access_key_id,
   secretAccessKey: process.env.aws_secret_access_key
 });
@@ -19,11 +21,11 @@ const storageTypes = {
     },
     filename: (req, file, cb) => {
       crypto.randomBytes(16, (err, hash) => {
-        if (err) cb(err);
+        if (err) cb(err, file.filename);
 
-        file.key = `${hash.toString("hex")}-${file.originalname}`;
+        file.filename = `${hash.toString("hex")}-${file.originalname}`;
 
-        cb(null, file.key);
+        cb(null, file.filename);
       });
     }
   }),

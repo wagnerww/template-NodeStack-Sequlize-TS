@@ -4,6 +4,14 @@ import { IUsuarios } from "../models/usuarios";
 import { IUsuarioEnderecos } from "../models/usuarioEnderecos";
 import { IAuth } from "./AuthInterface";
 
+export interface MulterFile {
+  key: string;
+  path: string;
+  mimetype: string;
+  originalname: string;
+  size: number;
+}
+
 export interface HttpRequest extends Request {
   usr_id?: number;
 }

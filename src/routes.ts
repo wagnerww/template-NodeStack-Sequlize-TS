@@ -1,10 +1,9 @@
 import * as express from "express";
 const routes = express.Router();
-/*const multer = require("multer");
-const multerConfig = require("./config/multer");
+import * as multer from "multer";
+import * as multerConfig from "./config/multer";
 
-
-const authMiddleware = require("./app/middlewares/auth");*/
+/*const authMiddleware = require("./app/middlewares/auth");*/
 
 import usuariosController from "./app/controllers/usuariosController";
 //const senhaUsuarioController = require("./app/controllers/senhaUsuarioController");
@@ -37,11 +36,11 @@ routes.delete("/fila/:id", agendamentoFilasController.destroy);
 routes.put("/usuario/:id", usuariosController.update);
 routes.delete("/usuario/:id", usuariosController.destroy);
 routes.get("/usuario/:id", usuariosController.show);
-/*routes.post(
+routes.post(
   "/usuario/:id/avatar",
   multer(multerConfig).single("file"),
   usuariosController.storeAvatar
-);*/
+);
 
 /* ---- USUÁRIO ENDEREÇOS ---- */
 // -- CRUD Endereço do usuário
