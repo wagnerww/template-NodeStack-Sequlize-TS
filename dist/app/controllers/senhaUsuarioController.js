@@ -87,7 +87,9 @@ class senhaUsuarioController {
                 next(responsePattern_1.default);
                 return;
             }
-            await models_1.default.Usuarios.update(body, { where: { id } });
+            const usuarioUpdate = await models_1.default.Usuarios.findById(id);
+            await usuarioUpdate.update(body);
+            await usuarioUpdate;
             const retorno = {
                 mensagem: "Troca de senha realizada com sucesso"
             };

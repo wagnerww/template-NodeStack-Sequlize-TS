@@ -8,6 +8,7 @@ const Youch = require("youch");
 //const sentryConfig = require("./config/sentry");
 const path = require("path");
 const cors = require("cors");
+const routes_1 = require("./routes");
 const responseHandler = require("./app/Middlewares/responseHandler");
 class App {
     constructor() {
@@ -26,7 +27,7 @@ class App {
         // this.express.use(Sentry.Handlers.requestHandler());
     }
     routes() {
-        this.express.use(require("./routes"));
+        this.express.use(routes_1.default);
         this.express.use(responseHandler);
     }
     exception() {

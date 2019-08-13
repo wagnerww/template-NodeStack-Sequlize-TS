@@ -6,6 +6,7 @@ import * as Youch from "youch";
 //const sentryConfig = require("./config/sentry");
 import * as path from "path";
 import * as cors from "cors";
+import routes from "./routes";
 
 const responseHandler = require("./app/Middlewares/responseHandler");
 
@@ -34,7 +35,7 @@ class App {
   }
 
   routes() {
-    this.express.use(require("./routes"));
+    this.express.use(routes);
     this.express.use(responseHandler);
   }
 
