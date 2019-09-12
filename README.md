@@ -2,7 +2,7 @@
 
 ## Template Node.js Stack TS + SEQUELIZE ![alt text](https://www.prchecker.info/free-icons/64x64/rocket_64_px.png)
 
-Este template é "casca" inicial de uma aplicação, visado a produtividade. O projeto é feito em typescript. Nele contém apenas o cadastro de usuários. A stack dele é composta pelo Express, sequelize, multer, redis....
+Este template é "casca" inicial de uma aplicação, visado a produtividade. O projeto é feito em typescript. Nele contém o cadastro de usuários, usuarios X endereços, filas de agendamentos, upload cloud-storage, scheduler, migrations, etc. A stack dele é composta pelo Express, sequelize, multer, redis....
 
 Siga os passos abaixo para entender e configurar o seu ambiente pq a coisa fico fodax ;)
 
