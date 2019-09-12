@@ -8,7 +8,7 @@ import {
 } from "../interfaces/HttpInterface";
 
 import { IResponseHandler } from "../interfaces/responseHandler";
-import { ICorpoFila, ICorpoFilaEmailCorpoEmail } from "../models/filas";
+import { ICorpoFila, ITipoCorpoEmail } from "../models/filas";
 
 import agendamentoFilasController from "./agendamentoFilasController";
 import response from "../../config/responsePattern";
@@ -54,9 +54,11 @@ class senhaUsuarioController {
             email: {
               assunto: "Recuperação de senha...🕵",
               destinatario: body.email,
-              corpoEmail: <ICorpoFilaEmailCorpoEmail>{
-                nome: usuario.nome,
-                link: `${urlApp}/${hash}`
+              corpoEmail: <ITipoCorpoEmail>{
+                recuperacaoSenha: {
+                  nome: usuario.nome,
+                  link: `${urlApp}/${hash}`
+                }
               }
             }
           }
@@ -124,7 +126,9 @@ class senhaUsuarioController {
         return;
       }
 
-      await db.Usuarios.update(body, { where: { id } });
+      const usuarioUpdate = await db.Usuarios.findById(id);
+      await usuarioUpdate.update(body);
+      await usuarioUpdate;
 
       const retorno = {
         mensagem: "Troca de senha realizada com sucesso"

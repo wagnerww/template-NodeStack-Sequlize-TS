@@ -3,15 +3,19 @@ import * as Sequelize from "sequelize";
 import { BaseModelInterface } from "../interfaces/BaseModelInterface";
 import { ModelsInterface } from "../interfaces/ModelsInterface";
 
-export interface ICorpoFilaEmailCorpoEmail {
+export interface ICorpoRecuperacaoSenha {
   nome: string;
   link: string;
+}
+
+export interface ITipoCorpoEmail {
+  recuperacaoSenha?: ICorpoRecuperacaoSenha;
 }
 
 export interface ICorpoFilaEmail {
   destinatario: string;
   assunto: string;
-  corpoEmail: ICorpoFilaEmailCorpoEmail;
+  corpoEmail: ITipoCorpoEmail;
 }
 
 export interface ICorpoFila {

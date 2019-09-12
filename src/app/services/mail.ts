@@ -3,25 +3,13 @@ const nodemailer = require("nodemailer");
 const path = require("path");
 const hbs = require("nodemailer-express-handlebars");
 const exphbs = require("express-handlebars");
+import { ICorpoFilaEmail } from "../models/filas";
 
-//send("Atleta vc está quase lá...🕵", "wagnerricardonet@gmail.com");
+async function send(emailConfig: ICorpoFilaEmail, templateEmail: string) {
+  const { assunto, destinatario, corpoEmail } = emailConfig;
 
-async function send(assunto, paraQuem, corpoEmail, templateEmail) {
   let isEnviado;
   let errorDescription = "";
-  /* MAIL GUN
- var api_key = "";
-  var domain = "";
-  var mailgun = require("mailgun-js")({ apiKey: api_key, domain: domain });
-  var data = {
-    from: "Excited User <wagnerricardonet@gmail.com>",
-    to: "wagnerricardonet@gmail.com",
-    subject: "Hello",
-    text: "vai"
-  };
-  mailgun.messages().send(data, function(error, body) {
-    console.log(body);
-  });*/
 
   let transporter = nodemailer.createTransport({
     service: "gmail",
@@ -48,13 +36,12 @@ async function send(assunto, paraQuem, corpoEmail, templateEmail) {
   try {
     let info = await transporter.sendMail({
       from: `${process.env.MAIL_FROM_NAME} <${process.env.MAIL_FROM_EMAIL}>`, //De quem
-      to: paraQuem,
+      to: destinatario,
       subject: assunto,
-      /* text: corpoEmail, //texto html, isso é um escape se o email bloquear o body do html
-       html: templateEmail ? "" : corpoEmail, //corpo do html,*/
       template: templateEmail,
       context: { corpoEmail }
     });
+
     isEnviado = true;
   } catch (error) {
     errorDescription = `Erro ao enviar o email: ${error}`;
@@ -64,4 +51,4 @@ async function send(assunto, paraQuem, corpoEmail, templateEmail) {
   return { isEnviado, errorDescription };
 }
 
-module.exports = send;
+export default send;

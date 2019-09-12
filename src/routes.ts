@@ -1,13 +1,12 @@
 import * as express from "express";
+import * as multer from "multer";
+import * as multerConfig from "./config/multer";
 const routes = express.Router();
-/*const multer = require("multer");
-const multerConfig = require("./config/multer");
 
-
-const authMiddleware = require("./app/middlewares/auth");*/
+/*const authMiddleware = require("./app/middlewares/auth");*/
 
 import usuariosController from "./app/controllers/usuariosController";
-//const senhaUsuarioController = require("./app/controllers/senhaUsuarioController");
+import senhaUsuarioController from "./app/controllers/senhaUsuarioController";
 import enderecosUsuarioController from "./app/controllers/enderecosUsuarioController";
 import sessaoController from "./app/controllers/sessaoController";
 import agendamentoFilasController from "./app/controllers/agendamentoFilasController";
@@ -18,8 +17,8 @@ routes.post("/usuarios", usuariosController.store);
 routes.post("/login", sessaoController.store);
 //
 ///* ---- RECUPERAÇÃO DE SENHA ---- */
-//routes.post("/usuario/recuperarsenha", senhaUsuarioController.recuperarSenha);
-//routes.post("/usuario/trocarsenha/:hash", senhaUsuarioController.trocarSenha);
+routes.post("/usuario/recuperarsenha", senhaUsuarioController.recuperarSenha);
+routes.post("/usuario/trocarsenha/:hash", senhaUsuarioController.trocarSenha);
 //
 //routes.use(authMiddleware);
 routes.get("/usuarios", usuariosController.index);
@@ -37,11 +36,11 @@ routes.delete("/fila/:id", agendamentoFilasController.destroy);
 routes.put("/usuario/:id", usuariosController.update);
 routes.delete("/usuario/:id", usuariosController.destroy);
 routes.get("/usuario/:id", usuariosController.show);
-/*routes.post(
+routes.post(
   "/usuario/:id/avatar",
   multer(multerConfig).single("file"),
   usuariosController.storeAvatar
-);*/
+);
 
 /* ---- USUÁRIO ENDEREÇOS ---- */
 // -- CRUD Endereço do usuário
@@ -55,4 +54,4 @@ routes.delete(
 routes.get("/usuario/:usr_id/enderecos", enderecosUsuarioController.index);
 routes.get("/usuario/:usr_id/endereco/:id", enderecosUsuarioController.show);
 
-module.exports = routes;
+export default routes;

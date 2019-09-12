@@ -78,7 +78,7 @@ class enderecosUsuarioController {
             return;
           }
 
-          const isOk: boolean = await redisEmail.store(body.conteudoJson);
+          const isOk: boolean = await redisEmail.store(body.corpoFila);
           if (!isOk) {
             body.status = 1;
 

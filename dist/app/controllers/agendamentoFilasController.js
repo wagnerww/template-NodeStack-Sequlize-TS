@@ -63,7 +63,7 @@ class enderecosUsuarioController {
                         next(responsePattern_1.default);
                         return;
                     }
-                    const isOk = await redisEmail_1.default.store(body.conteudoJson);
+                    const isOk = await redisEmail_1.default.store(body.corpoFila);
                     if (!isOk) {
                         body.status = 1;
                         fila = await models_1.default.Filas.create(body);

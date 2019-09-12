@@ -13,8 +13,9 @@ class enviarEmail {
                     for (let i in values) {
                         let value = values[i];
                         let jsonEmail = JSON.parse(value);
+                        const enviarEmailRef = new enviarEmail();
                         //Envia o email
-                        const { isEnviado, errorDescription } = await this.env(jsonEmail);
+                        const { isEnviado, errorDescription } = await enviarEmailRef.enviaEmail(jsonEmail);
                         if (isEnviado)
                             redis_1.default.SREM("sendEmail", value);
                     }
@@ -23,10 +24,11 @@ class enviarEmail {
         this.enivarEmailFilas = async () => {
             const filas = await models_1.default.Filas.findAll({ where: { tipo: 1, status: 1 } });
             const envio = await Promise.all(await filas.map(async (fila) => {
-                const jsonEmail = JSON.parse(fila.conteudoJson);
+                const jsonEmail = fila.corpoFila;
                 let qtdExecucao = fila.qtdExecucao + 1;
+                const enviarEmailRef = new enviarEmail();
                 //Envia o email
-                const { isEnviado, errorDescription } = await this.enviaEmail(jsonEmail);
+                const { isEnviado, errorDescription } = await enviarEmailRef.enviaEmail(jsonEmail);
                 if (isEnviado) {
                     await fila.update({ status: 3, qtdExecucao });
                 }
@@ -36,9 +38,18 @@ class enviarEmail {
             }));
         };
         this.enviaEmail = async (jsonEmail) => {
-            const { assunto, destinatario, corpoEmail } = jsonEmail;
-            //envia o email
-            const resEmail = await mail_1.default(assunto, destinatario, corpoEmail, "recuperacaoSenha");
+            let template = "";
+            //Testa o tipo de email da fila
+            /* switch (jsonEmail.email.corpoEmail) {
+              case jsonEmail.email.corpoEmail.recuperacaoSenha:
+                template = "recuperacaoSenha";
+                break;
+        
+              default:
+                break;
+            }*/
+            template = "recuperacaoSenha";
+            const resEmail = await mail_1.default(jsonEmail.email, template);
             const { isEnviado, errorDescription } = resEmail;
             return { isEnviado, errorDescription };
         };

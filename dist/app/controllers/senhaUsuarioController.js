@@ -34,8 +34,10 @@ class senhaUsuarioController {
                             assunto: "Recuperação de senha...🕵",
                             destinatario: body.email,
                             corpoEmail: {
-                                nome: usuario.nome,
-                                link: `${baseurlApp_1.default}/${hash}`
+                                recuperacaoSenha: {
+                                    nome: usuario.nome,
+                                    link: `${baseurlApp_1.default}/${hash}`
+                                }
                             }
                         }
                     }
@@ -87,7 +89,9 @@ class senhaUsuarioController {
                 next(responsePattern_1.default);
                 return;
             }
-            await models_1.default.Usuarios.update(body, { where: { id } });
+            const usuarioUpdate = await models_1.default.Usuarios.findById(id);
+            await usuarioUpdate.update(body);
+            await usuarioUpdate;
             const retorno = {
                 mensagem: "Troca de senha realizada com sucesso"
             };

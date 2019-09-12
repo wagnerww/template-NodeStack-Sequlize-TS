@@ -128,25 +128,21 @@ class usuariosController {
         }
     }
     async storeAvatar(req, res, next) {
-        /* try {
-          const pathAvatar = req.file.key;
-          const { usr_id, id } = req;
-    
-          const usuario = await usuariosModel
-            .query()
-            .updateAndFetchById(id, { avatar: pathAvatar });
-    
-          usuario.avatar = req.file.location;
-    
-          response.statusCode = 200;
-          response.data = usuario;
-          next(response);
-        } catch (error) {
-          response.statusCode = 500;
-          response.message = error.message;
-          next(response);
-          return;
-        }*/
+        try {
+            const pathAvatar = req.file.key;
+            const { id } = req.params;
+            const usuario = await models_1.default.Usuarios.update({ avatar: pathAvatar }, { where: { id } });
+            // usuario = req.file.location;
+            responsePattern_1.default.statusCode = 200;
+            responsePattern_1.default.data = usuario;
+            next(responsePattern_1.default);
+        }
+        catch (error) {
+            responsePattern_1.default.statusCode = 500;
+            responsePattern_1.default.message = error.message;
+            next(responsePattern_1.default);
+            return;
+        }
         return;
     }
 }
